@@ -1,7 +1,44 @@
 import React from "react";
 import Nav from "./nav";
+import { FaHome, FaCoins, FaCalendarAlt } from "react-icons/fa";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 export default function Main() {
+  interface Extra {
+    id: number;
+    extra: string;
+    emo: React.JSX.Element;
+  }
+
+  const extraImg: Extra[] = [
+    {
+      id: 1,
+      extra: "1번입니다. ",
+      emo: <FaHome />,
+    },
+    {
+      id: 2,
+      extra: "2번입니다. ",
+      emo: <FaCoins />,
+    },
+    {
+      id: 3,
+      extra: "3번입니다. ",
+      emo: <FaCalendarAlt />,
+    },
+    {
+      id: 4,
+      extra: "4번입니다. ",
+      emo: <FaPeopleGroup />,
+    },
+  ];
+
+  const navigate = useNavigate();
+  const start = () => {
+    navigate("/kitchen");
+  };
+
   return (
     <div>
       <Nav />
@@ -14,7 +51,10 @@ export default function Main() {
         <h2 className="absolute top-[350px] font-bold text-2xl">
           ALIVE ALONE !
         </h2>
-        <button className=" hover:bg-blue-500 cursor-pointer absolute bg-blue-200 top-[400px] p-6 rounded-full z-10">
+        <button
+          onClick={start}
+          className=" hover:bg-blue-500 cursor-pointer absolute bg-blue-200 top-[400px] p-6 rounded-full z-10"
+        >
           Get Start
         </button>
       </div>
@@ -27,9 +67,10 @@ export default function Main() {
         {Array.from({ length: 4 }, (_, i) => (
           <div
             key={i}
-            className="border p-20 text-center bg-gray-200 rouded-full"
+            className="flex flex-col items-center justify-center border p-20 text-center bg-gray-200 rouded-full"
           >
-            Box {i + 1}
+            {extraImg[i].emo} <br></br>
+            {extraImg[i].extra}
           </div> //배열로 그림만 넣을거면 유지
         ))}
       </div>
