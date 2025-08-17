@@ -1,6 +1,6 @@
 import React, { type FC } from "react";
-import Kom from "../../assets/kom.png";
-import re from "../../assets/react.svg";
+import Kom from "../../../assets/kom.png";
+import re from "../../../assets/react.svg";
 
 const Kessential: FC = () => {
   interface Topic {

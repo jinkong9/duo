@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Nav from "../Main/nav";
-import Kclean from "./kclean";
-import Kstorage from "./kstorage";
-import Kessential from "./kessential";
+import Kclean from "./Modal/kclean";
+import Kstorage from "./Modal/kstorage";
+import Kessential from "./Modal/kessential";
 
 export default function Kitchen() {
   const [ViewTip, setViewTip] = useState("Cleaning");

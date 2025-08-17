@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Nav() {
-  interface CheckLogin {
-    check: string;
-  }
+  // interface CheckLogin {
+  //   check: string;
+  // }
   // const [login, checkLogin] = useState<CheckLogin>({
   //   check: "Login",
   // });

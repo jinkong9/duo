@@ -1,8 +1,8 @@
 import React, { type FC } from "react";
-import Kom from "../../assets/kom.png";
-import re from "../../assets/react.svg";
+import Kom from "../../../assets/kom.png";
+import re from "../../../assets/react.svg";
 
-const Kstorage: FC = () => {
+const Kclean: FC = () => {
   interface Topic {
     main: string;
     sub: string;
@@ -10,7 +10,7 @@ const Kstorage: FC = () => {
   }
   const CTopic: Topic[] = [
     {
-      main: "스토레지 청소하는법",
+      main: "싱크대 청소하는법",
       sub: "싱크대는 습하므로 핑크색 곰팡이가 많이 낌",
       img: Kom,
     },
@@ -20,7 +20,7 @@ const Kstorage: FC = () => {
       img: re,
     },
     {
-      main: "스토로지 청소하는법",
+      main: "식기건조대 청소하는법",
       sub: "싱크대와 마찬가지로 습해서 핑크 곰팡이 많이 낌",
       img: Kom,
     },
@@ -88,4 +88,4 @@ const Kstorage: FC = () => {
   );
 };
 
-export default Kstorage;
+export default Kclean;
