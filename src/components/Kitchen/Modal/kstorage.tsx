@@ -32,7 +32,7 @@ const Kstorage: FC = () => {
   ];
   return (
     <div>
-      <div className="flex border">
+      <div className="font-[--font-pretendard] flex border">
         <img
           className="w-[300px] h[300px] mt-5 mb-5 ml-5 mr-15"
           src={CTopic[0].img}

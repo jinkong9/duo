@@ -42,15 +42,17 @@ export default function Join() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
-      <h3>회원가입</h3>
-      <div className="flex flex-col border border-gray-300 rounded-lg p-10 bg-white">
-        <div className="w-100 flex flex-col items-center">
-          <div className="flex flex-col items-center justify-center  border border-black p-20">
+    <div className="font-[--font-pretendard] flex flex-col justify-center items-center  w-full min-h-screen bg-amber-100">
+      <p className="mb-15 font-bold text-black text-5xl text-center hover:text-amber-700 mt-4 pt-4">
+        회원가입
+      </p>
+      <div className="flex flex-col border border-black-300 rounded-2xl p-10 bg-amber-100">
+        <div className="w-[500px] h-[420px] flex flex-col items-center">
+          <div className="flex flex-col gap-3 items-center justify-center p-7">
             <label className="flex items-center justify-between w-full mb-4">
               <span className="w-28 text-left">이름</span>
               <input
-                className="flex-1 border border-gray-300 rounded-xl p-2"
+                className="flex-1 border border-black bg-white rounded-full p-3"
                 type="text"
                 id="name"
                 name="name_box"
@@ -67,7 +69,7 @@ export default function Join() {
             <label className="flex items-center justify-between w-full mb-4">
               <span className="w-28 text-left">이메일</span>
               <input
-                className="flex-1 border border-gray-300 rounded-xl p-2"
+                className="flex-1 border border-black bg-white rounded-full p-3"
                 type="text"
                 id="email"
                 name="email_box"
@@ -84,7 +86,7 @@ export default function Join() {
             <label className="flex items-center justify-between w-full mb-4">
               <span className="w-28 text-left">비밀번호</span>
               <input
-                className="flex-1 border border-gray-300 rounded-xl p-2"
+                className="flex-1 border border-black bg-white rounded-full p-3"
                 type="password"
                 id="pw"
                 name="pw_box"
@@ -101,7 +103,7 @@ export default function Join() {
             <label className="flex items-center justify-between w-full mb-4">
               <span className="w-28 text-left">비밀번호 확인</span>
               <input
-                className="flex-1 border border-gray-300 rounded-xl p-2"
+                className="flex-1 border border-black bg-white rounded-full p-3"
                 type="password"
                 id="checkpw"
                 name="checkpw_box"
@@ -115,7 +117,9 @@ export default function Join() {
                 }}
               ></input>
             </label>
-            <button className="border border-black-100">제출하기</button>
+            <button className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3">
+              제출하기
+            </button>
           </div>
         </div>
         <div className="flex items-center justify-center gap-5">

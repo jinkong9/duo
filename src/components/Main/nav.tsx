@@ -13,13 +13,16 @@ export default function Nav() {
   const GoKitchen = () => {
     navigate("/kitchen");
   };
+  const GoRestroom = () => {
+    navigate("/restroom");
+  };
 
   return (
-    <div className="relative p-5 mb-10 bg-gray-300">
+    <div className="font-[--font-pretendard] relative p-3 mb-10 bg-emerald-600">
       <div className="text-left absolute flex">
         <Link
           to="/"
-          className="overflow-hidden ml-10 text-xl text-center font-bold cursor-pointer"
+          className="overflow-hidden ml-5 text-xl text-center font-bold cursor-pointer"
         >
           ALIVE ALONE
         </Link>

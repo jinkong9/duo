@@ -40,7 +40,7 @@ export default function Main() {
   };
 
   return (
-    <div>
+    <div className="font-[--font-pretendard] bg-amber-100">
       <Nav />
       <div className="relative items-center justify-center flex">
         <img
@@ -53,21 +53,21 @@ export default function Main() {
         </h2>
         <button
           onClick={start}
-          className=" hover:bg-blue-500 cursor-pointer absolute bg-blue-200 top-[400px] p-6 rounded-full z-10"
+          className="hover:shadow-2xl hover:bg-amber-400 cursor-pointer absolute bg-amber-200 top-[400px] p-6 rounded-full z-10"
         >
           Get Start
         </button>
       </div>
       <div>
-        <h2 className="mt-10 text-center font-bole text-2xl">
-          HELLO YURA HELLO YURA HELLO YURA HELLO YURA HELLO YURA
+        <h2 className="mt-10 text-center font-bold text-2xl">
+          자취생을 위한 다양한 꿀팁 서비스
         </h2>
       </div>
       <div className="flex items-center justify-center mt-10 grid-cols-2 gap-15">
         {Array.from({ length: 4 }, (_, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center border p-20 text-center bg-gray-200 rouded-full"
+            className="flex flex-col items-center justify-center border p-20 text-center bg-gray-200 rounded-4xl"
           >
             {extraImg[i].emo} <br></br>
             {extraImg[i].extra}

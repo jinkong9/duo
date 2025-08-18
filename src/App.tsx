@@ -4,6 +4,7 @@ import Login from "./components/Login/login";
 import Main from "./components/Main/main";
 import Kitchen from "./components/Kitchen/kitchen";
 import Join from "./components/Join/join";
+import Restroom from "./components/Restroom/restroom";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/kitchen" element={<Kitchen />} />
         <Route path="/join" element={<Join />} />
+        <Route path="/restroom" element={<Restroom />} />
       </Routes>
     </BrowserRouter>
   );
