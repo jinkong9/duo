@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import Nav from "../Main/nav";
-import Rclean from "./Modal/rclear";
-import Ressential from "./Modal/ressential";
-import Rstorage from "./Modal/rstorage";
-export default function Restroom() {
+import Lclean from "./Modal/lclear";
+import Lessential from "./Modal/lessential";
+import Lstorage from "./Modal/lstroage";
+
+export default function Livingroom() {
   const [ViewTip, setViewTip] = useState("Cleaning");
   const select = () => {
     if (ViewTip == "Cleaning") {
-      return <Rclean />;
+      return <Lclean />;
     } else if (ViewTip == "Essential") {
-      return <Ressential />;
+      return <Lessential />;
     } else if (ViewTip == "Storage") {
-      return <Rstorage />;
+      return <Lstorage />;
     }
   };
 

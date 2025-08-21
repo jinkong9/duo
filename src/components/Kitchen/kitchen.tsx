@@ -29,7 +29,7 @@ export default function Kitchen() {
   return (
     <div className="font-[--font-pretendard]">
       <Nav />
-      <a className="ml-10 text-2xl font-bold">Kitchen Tips !</a>
+      <a className="ml-10 text-2xl font-bold">주방 Tips !</a>
       <div className="flex items-left">
         <a
           className="m-10 cursor-pointer text-xl font-bold text-gray-500 overflow-hidden hover:text-black"

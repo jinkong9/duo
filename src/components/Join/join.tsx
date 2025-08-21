@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 export default function Join() {
   interface Join {
     name: string;
-    email: string | number;
-    password: string | number;
-    check_password: string | number;
+    email: string;
+    password: string;
+    check_password: string;
   }
 
   const api = axios.create({
@@ -22,7 +22,7 @@ export default function Join() {
     check_password: "",
   });
 
-  const [agree, setAgree] = useState<boolean>();
+  const [agree, setAgree] = useState<boolean | null>();
   const navigate = useNavigate();
 
   const handleJoin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -112,13 +112,13 @@ export default function Join() {
                 onChange={(e) => {
                   setInfo({
                     ...info,
-                    name: e.target.value,
+                    check_password: e.target.value,
                   });
                 }}
               ></input>
             </label>
             <button className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3">
-              제출하기
+              회원가입
             </button>
           </div>
         </div>
@@ -126,6 +126,7 @@ export default function Join() {
           <label>
             개인정보활용 동의
             <input
+              className="cursor-pointer shadow-lg p-2"
               type="checkbox"
               checked={agree === true}
               onChange={() => {
@@ -136,6 +137,7 @@ export default function Join() {
           <label>
             동의하지 않음
             <input
+              className="cursor-pointer shadow-lg"
               type="checkbox"
               checked={agree === false}
               onChange={() => {

@@ -5,6 +5,8 @@ import Main from "./components/Main/main";
 import Kitchen from "./components/Kitchen/kitchen";
 import Join from "./components/Join/join";
 import Restroom from "./components/Restroom/restroom";
+import Gohome from "./components/tail/gohome";
+import Livingroom from "./components/Livingroom/livingroom";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/kitchen" element={<Kitchen />} />
         <Route path="/join" element={<Join />} />
         <Route path="/restroom" element={<Restroom />} />
+        <Route path="/livingroom" element={<Livingroom />} />
+        <Route path="/go" element={<Gohome />} />
       </Routes>
     </BrowserRouter>
   );

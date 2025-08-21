@@ -16,6 +16,9 @@ export default function Nav() {
   const GoRestroom = () => {
     navigate("/restroom");
   };
+  const GoLivingroom = () => {
+    navigate("/livingroom");
+  };
 
   return (
     <div className="font-[--font-pretendard] relative p-3 mb-10 bg-emerald-600">
@@ -27,15 +30,30 @@ export default function Nav() {
           ALIVE ALONE
         </Link>
         <a
-          className="overflow-hidden ml-10 text-center cursor-pointer"
+          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
           onClick={GoKitchen}
         >
-          KITCHEN
+          주방
+        </a>
+        <a
+          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
+          onClick={GoRestroom}
+        >
+          욕실
+        </a>
+        <a
+          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
+          onClick={GoLivingroom}
+        >
+          거실
         </a>
       </div>
       <div className="text-right">
-        <a className="mr-30 overflow-hidden cursor-pointer">내정보</a>
-        <Link to="/login" className="overflow-hidden mr-10 cursor-pointer">
+        <a className="mr-30 overflow-hidden cursor-pointer font-bold">내정보</a>
+        <Link
+          to="/login"
+          className="overflow-hidden mr-10 cursor-pointer font-bold"
+        >
           Login
         </Link>
       </div>
