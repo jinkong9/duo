@@ -5,7 +5,7 @@ import axios from "axios";
 
 export default function Login() {
   interface Login {
-    id: string | number;
+    email: string | number;
     pw: string | number;
   }
 
@@ -15,7 +15,7 @@ export default function Login() {
   });
 
   const [info, setInfo] = useState<Login>({
-    id: "",
+    email: "",
     pw: "",
   });
   return (
@@ -27,17 +27,17 @@ export default function Login() {
         <div className="mt-10 flex justify-center items-center">
           <div className="w-[500px] h-[400px] rounded-3xl border border-black-100 mt-10 p-5 flex flex-col items-center justify-center mt-10">
             <div className="flex items-baseline gap-x-4">
-              <label className="font-bold text-right">ID</label>
+              <label className="font-bold text-right">email</label>
               <input
                 className="rounded-full bg-white font-bold text-center border border-black-100 p-5 mt-10"
                 type="text"
                 id="id"
-                value={info.id}
-                placeholder="아이디를 적어주세요"
+                value={info.email}
+                placeholder="E-Mail을 적어주세요"
                 onChange={(e) => {
                   setInfo({
                     ...info,
-                    id: e.target.value,
+                    email: e.target.value,
                   });
                 }}
               ></input>

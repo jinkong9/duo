@@ -16,9 +16,9 @@ export default function Gohome() {
       text-center
     "
       >
-        집에 가고싶다 <br />
+        뭐<br />
         <br />
-        퇴근할래요
+        채유라바보
       </div>
     </div>
   );

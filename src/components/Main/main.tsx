@@ -53,7 +53,7 @@ export default function Main() {
         </h2>
         <button
           onClick={start}
-          className="hover:shadow-2xl hover:bg-amber-400 cursor-pointer absolute bg-amber-200 top-[400px] p-6 rounded-full z-10"
+          className="hover:shadow-2xl hover:bg-stone-400 font-bold cursor-pointer absolute bg-stone-300 top-[400px] p-6 rounded-full z-10"
         >
           Get Start
         </button>
