@@ -10,29 +10,29 @@ const Rstorage: FC = () => {
   }
   const CTopic: Topic[] = [
     {
-      main: "스토레지 청소하는법",
-      sub: "싱크대는 습하므로 핑크색 곰팡이가 많이 낌",
+      main: "탈모샴푸",
+      sub: "젊은 사람들도 방심할 수 없는 불치병",
       img: Kom,
     },
     {
-      main: "전자레인지 청소하는법",
-      sub: "전자레인지는 주변 음식물들이 타서 검게 변함",
+      main: "린스",
+      sub: "푸석한 머리결로부터 조금 회생이 가능한 물품",
       img: re,
     },
     {
-      main: "스토로지 청소하는법",
-      sub: "싱크대와 마찬가지로 습해서 핑크 곰팡이 많이 낌",
+      main: "바디워시",
+      sub: "땀냄새로부터 안녕할 수 있는 필수템",
       img: Kom,
     },
     {
-      main: "후드 청소하는법",
-      sub: "기름진 음식요리 후 후드가 기름때로 가득 참",
+      main: "클렌징오일",
+      sub: "선크림, 화장품, 미세먼지까지 지우는 세안템",
       img: re,
     },
   ];
   return (
-    <div>
-      <div className="font-[--font-pretendard] flex border">
+    <div className="font-[--font-pretendard] ">
+      <div className="flex border">
         <img
           className="w-[300px] h[300px] mt-5 mb-5 ml-5 mr-15"
           src={CTopic[0].img}

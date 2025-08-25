@@ -10,23 +10,23 @@ const Ressential: FC = () => {
   }
   const CTopic: Topic[] = [
     {
-      main: "이센셜 청소하는법",
-      sub: "싱크대는 습하므로 핑크색 곰팡이가 많이 낌",
+      main: "락스",
+      sub: "핑크색 물 때와 냄새를 제거해주는 필수템 !",
       img: re,
     },
     {
-      main: "전자레인지 청소하는법",
-      sub: "전자레인지는 주변 음식물들이 타서 검게 변함",
+      main: "변기전용 일회용 카트리지",
+      sub: "하나씩 뽑아쓰는 카트리지로 편한 처리와 강한 청소력 !",
       img: Kom,
     },
     {
-      main: "이센션 청소하는법",
-      sub: "싱크대와 마찬가지로 습해서 핑크 곰팡이 많이 낌",
+      main: "스퀴즈",
+      sub: "습한 화장실 바닥으로부터 탈출 가능 !",
       img: re,
     },
     {
-      main: "후드 청소하는법",
-      sub: "기름진 음식요리 후 후드가 기름때로 가득 참",
+      main: "머리카락 전용 망",
+      sub: "자주막히는 배수구, 이제는 천천히 ..",
       img: Kom,
     },
   ];
@@ -36,7 +36,7 @@ const Ressential: FC = () => {
         <img
           className="w-[300px] h[300px] mt-5 mb-5 ml-5 mr-15"
           src={CTopic[0].img}
-          alt="싱크대"
+          alt="락스"
         ></img>
         <div className="mt-10 text-left">
           <a className="text-xl font-bold">{CTopic[0].main}</a>
@@ -49,7 +49,7 @@ const Ressential: FC = () => {
         <img
           className="w-[300px] h[300px] mt-5 mb-5 ml-5 mr-15"
           src={CTopic[1].img}
-          alt="싱크대"
+          alt="카트리지"
         ></img>
         <div className="mt-10 text-left">
           <a className="text-xl font-bold">{CTopic[1].main}</a>
@@ -62,7 +62,7 @@ const Ressential: FC = () => {
         <img
           className="w-[300px] h[300px] mt-5 mb-5 ml-5 mr-15"
           src={CTopic[2].img}
-          alt="싱크대"
+          alt="스퀴즈"
         ></img>
         <div className="mt-10 text-left">
           <a className="text-xl font-bold">{CTopic[2].main}</a>
@@ -75,7 +75,7 @@ const Ressential: FC = () => {
         <img
           className="w-[300px] h[300px] mt-5 mb-5 ml-5 mr-15"
           src={CTopic[3].img}
-          alt="싱크대"
+          alt="망"
         ></img>
         <div className="mt-10 text-left">
           <a className="text-xl font-bold">{CTopic[3].main}</a>

@@ -21,7 +21,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="font-[--font-pretendard] relative p-3 mb-10 bg-stone-300">
+    <div className="font-[--font-pretendard] relative p-5 mb-10 bg-stone-300">
       <div className="text-left absolute flex">
         <Link
           to="/"
