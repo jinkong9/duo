@@ -7,6 +7,7 @@ import Join from "./components/Join/join";
 import Restroom from "./components/Restroom/restroom";
 import Gohome from "./components/tail/gohome";
 import Livingroom from "./components/Livingroom/livingroom";
+import Post from "./Post/post";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/restroom" element={<Restroom />} />
         <Route path="/livingroom" element={<Livingroom />} />
         <Route path="/go" element={<Gohome />} />
+        <Route path="post" element={<Post />} />
       </Routes>
     </BrowserRouter>
   );

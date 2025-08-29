@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import type { Info } from "../../Model/logintype";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -10,7 +9,7 @@ export default function Login() {
   }
 
   const api = axios.create({
-    baseURL: "",
+    baseURL: "http://106.255.188.148:8082",
     withCredentials: true,
   });
 
@@ -18,20 +17,40 @@ export default function Login() {
     email: "",
     pw: "",
   });
+
+  const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!info.email || !info.pw) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    try {
+      const res = await api.post("/members/login", {
+        email: info.email,
+        pw: info.pw,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
   return (
     <div className="font-[--font-pretendard] bg-amber-100 w-full min-h-screen">
       <p className="active:scale-95 font-bold text-black text-5xl text-center hover:text-amber-700 mt-4 pt-7">
         Login
       </p>
-      <form>
+      <form onSubmit={handlelogin}>
         <div className="mt-10 flex justify-center items-center">
           <div className="w-[500px] h-[400px] rounded-3xl border border-black-100 mt-10 p-5 flex flex-col items-center justify-center mt-10">
             <div className="flex items-baseline gap-x-4">
               <label className="font-bold text-right">email</label>
               <input
                 className="rounded-full bg-white font-bold text-center border border-black-100 p-5 mt-10"
-                type="text"
-                id="id"
+                type="email"
+                id="email"
                 value={info.email}
                 placeholder="E-Mail을 적어주세요"
                 onChange={(e) => {

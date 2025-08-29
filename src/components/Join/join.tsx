@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,18 +6,20 @@ export default function Join() {
   interface Join {
     name: string;
     email: string;
+    age: string;
     password: string;
     check_password: string;
   }
 
   const api = axios.create({
-    baseURL: "",
+    baseURL: "http://106.255.188.148:8082",
     withCredentials: true,
   });
 
   const [info, setInfo] = useState<Join>({
     name: "",
     email: "",
+    age: "",
     password: "",
     check_password: "",
   });
@@ -25,8 +27,15 @@ export default function Join() {
   const [agree, setAgree] = useState<boolean | null>();
   const navigate = useNavigate();
 
-  const handleJoin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleJoin = async () => {
     if (!info.name || !info.email || !info.password || !info.check_password) {
       alert("모든 정보를 입력해주세요 !");
       return;
@@ -38,7 +47,22 @@ export default function Join() {
     if (agree == false) {
       alert("개인정보 활용 동의하지 않을 시 회원가입이 불가능합니다.");
     }
-    //try로 api 연결
+    try {
+      const res = await api.post("/members/register", {
+        email: info.email,
+        name: info.name,
+        age: info.age,
+        pw: info.password,
+      });
+      console.log(res.data);
+      alert("회원가입이 완료됐습니다.");
+      navigate("/members/login");
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        console.log("err.data", err.response?.data);
+        console.log("err.status", err.response?.status);
+      }
+    }
   };
 
   return (
@@ -55,32 +79,34 @@ export default function Join() {
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="text"
                 id="name"
-                name="name_box"
+                name="name"
                 placeholder="Name"
                 value={info.name}
-                onChange={(e) => {
-                  setInfo({
-                    ...info,
-                    name: e.target.value,
-                  });
-                }}
+                onChange={handleChange}
+              ></input>
+            </label>
+            <label className="flex items-center justify-between w-full mb-4">
+              <span className="w-28 text-left">나이</span>
+              <input
+                className="flex-1 border border-black bg-white rounded-full p-3"
+                type="text"
+                id="age"
+                name="age"
+                placeholder="나이"
+                value={info.age}
+                onChange={handleChange}
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
               <span className="w-28 text-left">이메일</span>
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
-                type="text"
+                type="email"
                 id="email"
-                name="email_box"
+                name="email"
                 placeholder="E-Mail"
                 value={info.email}
-                onChange={(e) => {
-                  setInfo({
-                    ...info,
-                    email: e.target.value,
-                  });
-                }}
+                onChange={handleChange}
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
@@ -88,16 +114,11 @@ export default function Join() {
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="password"
-                id="pw"
-                name="pw_box"
+                id="password"
+                name="password"
                 placeholder="Password"
                 value={info.password}
-                onChange={(e) => {
-                  setInfo({
-                    ...info,
-                    password: e.target.value,
-                  });
-                }}
+                onChange={handleChange}
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
@@ -105,19 +126,17 @@ export default function Join() {
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="password"
-                id="checkpw"
-                name="checkpw_box"
+                id="check_password"
+                name="check_password"
                 placeholder="Check_Password"
                 value={info.check_password}
-                onChange={(e) => {
-                  setInfo({
-                    ...info,
-                    check_password: e.target.value,
-                  });
-                }}
+                onChange={handleChange}
               ></input>
             </label>
-            <button className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3">
+            <button
+              onClick={handleJoin}
+              className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3"
+            >
               회원가입
             </button>
           </div>

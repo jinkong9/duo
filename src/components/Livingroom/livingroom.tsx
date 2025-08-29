@@ -29,7 +29,7 @@ export default function Livingroom() {
   return (
     <div className="font-[--font-pretendard]">
       <Nav />
-      <a className="ml-10 text-2xl font-bold">욕실 Tips !</a>
+      <a className="ml-10 text-2xl font-bold">거실 Tips !</a>
       <div className="flex items-left">
         <a
           className={`m-10 cursor-pointer text-xl font-bold overflow-hidden hover:text-black
