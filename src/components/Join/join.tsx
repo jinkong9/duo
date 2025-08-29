@@ -2,18 +2,18 @@ import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Join() {
-  interface Join {
-    name: string;
-    email: string;
-    age: string;
-    password: string;
-    check_password: string;
-  }
+interface Join {
+  name: string;
+  email: string;
+  age: string;
+  password: string;
+  check_password: string;
+}
 
+export default function Join() {
   const api = axios.create({
     baseURL: "http://106.255.188.148:8082",
-    withCredentials: true,
+    withCredentials: false,
   });
 
   const [info, setInfo] = useState<Join>({
@@ -24,7 +24,7 @@ export default function Join() {
     check_password: "",
   });
 
-  const [agree, setAgree] = useState<boolean | null>();
+  const [agree, setAgree] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,13 @@ export default function Join() {
   };
 
   const handleJoin = async () => {
-    if (!info.name || !info.email || !info.password || !info.check_password) {
+    if (
+      !info.name ||
+      !info.email ||
+      !info.age ||
+      !info.password ||
+      !info.check_password
+    ) {
       alert("모든 정보를 입력해주세요 !");
       return;
     }
@@ -44,14 +50,15 @@ export default function Join() {
       alert("비밀번호를 확인해주세요 !");
       return;
     }
-    if (agree == false) {
+    if (!agree) {
       alert("개인정보 활용 동의하지 않을 시 회원가입이 불가능합니다.");
+      return;
     }
     try {
       const res = await api.post("/members/register", {
         email: info.email,
         name: info.name,
-        age: info.age,
+        age: Number(info.age),
         pw: info.password,
       });
       console.log(res.data);
@@ -133,12 +140,6 @@ export default function Join() {
                 onChange={handleChange}
               ></input>
             </label>
-            <button
-              onClick={handleJoin}
-              className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3"
-            >
-              회원가입
-            </button>
           </div>
         </div>
         <div className="flex items-center justify-center gap-5">
@@ -147,24 +148,20 @@ export default function Join() {
             <input
               className="cursor-pointer shadow-lg p-2"
               type="checkbox"
-              checked={agree === true}
-              onChange={() => {
-                setAgree(true);
+              checked={agree}
+              onChange={(e) => {
+                setAgree(e.target.checked);
               }}
             ></input>
           </label>
-          <label>
-            동의하지 않음
-            <input
-              className="cursor-pointer shadow-lg"
-              type="checkbox"
-              checked={agree === false}
-              onChange={() => {
-                setAgree(false);
-                alert("동의하지 않을 시 회원가입 불가능합니다.");
-              }}
-            ></input>
-          </label>
+        </div>
+        <div className="flex justify-center items-center mt-5">
+          <button
+            onClick={handleJoin}
+            className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3"
+          >
+            회원가입
+          </button>
         </div>
       </div>
     </div>
