@@ -7,7 +7,9 @@ import Join from "./components/Join/join";
 import Restroom from "./components/Restroom/restroom";
 import Gohome from "./components/tail/gohome";
 import Livingroom from "./components/Livingroom/livingroom";
-import Post from "./Post/post";
+import Board from "./components/Board/board";
+import DetailPost from "./components/Board/detailpost";
+import Writepost from "./components/WritePost/writepost";
 
 function App() {
   return (
@@ -20,7 +22,9 @@ function App() {
         <Route path="/restroom" element={<Restroom />} />
         <Route path="/livingroom" element={<Livingroom />} />
         <Route path="/go" element={<Gohome />} />
-        <Route path="post" element={<Post />} />
+        <Route path="/board" element={<Board />} />
+        <Route path="/board/:postID" element={<DetailPost />} />
+        <Route path="/board/write" element={<Writepost />} />
       </Routes>
     </BrowserRouter>
   );

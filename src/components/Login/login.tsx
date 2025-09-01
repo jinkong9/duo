@@ -4,12 +4,12 @@ import axios from "axios";
 
 export default function Login() {
   interface Login {
-    email: string | number;
-    pw: string | number;
+    email: string;
+    pw: string;
   }
 
   const api = axios.create({
-    baseURL: "http://106.255.188.148:8082",
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
     withCredentials: true,
   });
 
@@ -45,37 +45,41 @@ export default function Login() {
       <form onSubmit={handlelogin}>
         <div className="mt-10 flex justify-center items-center">
           <div className="w-[500px] h-[400px] rounded-3xl border border-black-100 mt-10 p-5 flex flex-col items-center justify-center mt-10">
-            <div className="flex items-baseline gap-x-4">
-              <label className="font-bold text-right">email</label>
-              <input
-                className="rounded-full bg-white font-bold text-center border border-black-100 p-5 mt-10"
-                type="email"
-                id="email"
-                value={info.email}
-                placeholder="E-Mail을 적어주세요"
-                onChange={(e) => {
-                  setInfo({
-                    ...info,
-                    email: e.target.value,
-                  });
-                }}
-              ></input>
+            <div className="flex items-baseline gap-x-4 mb-6">
+              <label className="flex items-center justify-between w-full mb-4">
+                <span className="w-18 text-center font-bold">E-Mail</span>
+                <input
+                  className="flex-1 border border-black bg-white rounded-full p-5"
+                  type="email"
+                  id="email"
+                  value={info.email}
+                  placeholder="이메일을 적어주세요"
+                  onChange={(e) => {
+                    setInfo({
+                      ...info,
+                      email: e.target.value,
+                    });
+                  }}
+                ></input>
+              </label>
             </div>
             <div className="flex items-baseline gap-x-4">
-              <label className="font-bold  text-right">PW </label>
-              <input
-                className="rounded-full bg-white font-bold text-center border border-black-100 p-5 mt-10 mb-10"
-                type="password"
-                id="pw"
-                value={info.pw}
-                placeholder="비밀번호를 적어주세요"
-                onChange={(e) => {
-                  setInfo({
-                    ...info,
-                    pw: e.target.value,
-                  });
-                }}
-              ></input>
+              <label className="flex items-center justify-between w-full mb-7">
+                <span className="w-18 text-center font-bold">PW</span>
+                <input
+                  className="flex-1 border border-black bg-white rounded-full p-5"
+                  type="password"
+                  id="pw"
+                  value={info.pw}
+                  placeholder="비밀번호를 적어주세요"
+                  onChange={(e) => {
+                    setInfo({
+                      ...info,
+                      pw: e.target.value,
+                    });
+                  }}
+                ></input>
+              </label>
             </div>
             <button
               className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-7 pr-7 pt-3 pb-3 mb-10"

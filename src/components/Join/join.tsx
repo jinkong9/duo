@@ -12,8 +12,8 @@ interface Join {
 
 export default function Join() {
   const api = axios.create({
-    baseURL: "http://106.255.188.148:8082",
-    withCredentials: false,
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+    withCredentials: true,
   });
 
   const [info, setInfo] = useState<Join>({
@@ -81,7 +81,7 @@ export default function Join() {
         <div className="w-[500px] h-[420px] flex flex-col items-center">
           <div className="flex flex-col gap-3 items-center justify-center p-7">
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-left">이름</span>
+              <span className="w-28 text-center font-bold">이름</span>
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="text"
@@ -93,7 +93,7 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-left">나이</span>
+              <span className="w-28 text-center font-bold">나이</span>
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="text"
@@ -105,7 +105,7 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-left">이메일</span>
+              <span className="w-28 text-center font-bold">이메일</span>
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="email"
@@ -117,7 +117,7 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-left">비밀번호</span>
+              <span className="w-28 text-center font-bold">비밀번호</span>
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="password"
@@ -129,7 +129,7 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-left">비밀번호 확인</span>
+              <span className="w-28 text-center font-bold">비밀번호 확인</span>
               <input
                 className="flex-1 border border-black bg-white rounded-full p-3"
                 type="password"
@@ -142,11 +142,11 @@ export default function Join() {
             </label>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-5">
+        <div className="flex items-center justify-center">
           <label>
             개인정보활용 동의
             <input
-              className="cursor-pointer shadow-lg p-2"
+              className="cursor-pointer shadow-lg p-2 ml-2"
               type="checkbox"
               checked={agree}
               onChange={(e) => {

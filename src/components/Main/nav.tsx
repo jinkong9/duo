@@ -39,7 +39,7 @@ export default function Nav() {
           거실
         </Link>
         <Link
-          to="/post"
+          to="/board"
           className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
         >
           WITH
