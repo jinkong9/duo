@@ -10,6 +10,7 @@ import Livingroom from "./components/Livingroom/livingroom";
 import Board from "./components/Board/board";
 import DetailPost from "./components/Board/detailpost";
 import Writepost from "./components/WritePost/writepost";
+import Myinfo from "./components/Myinfo/myinfo";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/board" element={<Board />} />
         <Route path="/board/:postID" element={<DetailPost />} />
         <Route path="/board/write" element={<Writepost />} />
+        <Route path="/myinfo" element={<Myinfo />} />
       </Routes>
     </BrowserRouter>
   );

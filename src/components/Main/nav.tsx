@@ -46,7 +46,12 @@ export default function Nav() {
         </Link>
       </div>
       <div className="text-right">
-        <a className="mr-30 overflow-hidden cursor-pointer font-bold">내정보</a>
+        <Link
+          to="/myinfo"
+          className="overflow-hidden mr-15 cursor-pointer font-bold"
+        >
+          내정보
+        </Link>
         <Link
           to="/login"
           className="overflow-hidden mr-10 cursor-pointer font-bold"
