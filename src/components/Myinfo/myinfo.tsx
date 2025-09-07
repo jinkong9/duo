@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from "../Main/nav";
 import icon from "../../assets/iconimg.png";
+import axios from "axios";
 
 interface GetTip {
   title: string;
@@ -9,6 +10,10 @@ interface GetTip {
 }
 
 export default function Myinfo() {
+  const api = axios.create({
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+    withCredentials: true,
+  });
   return (
     <div className="bg-amber-100 min-h-screen font-[--font-pretendard]">
       <Nav />

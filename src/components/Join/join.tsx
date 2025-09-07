@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,11 @@ interface Join {
   age: string;
   password: string;
   check_password: string;
+}
+
+interface JoinRes {
+  success: string;
+  status: number;
 }
 
 export default function Join() {
@@ -55,15 +60,18 @@ export default function Join() {
       return;
     }
     try {
-      const res = await api.post("/members/register", {
+      const res: AxiosResponse<JoinRes> = await api.post("/members/register", {
         email: info.email,
         name: info.name,
         age: Number(info.age),
         pw: info.password,
       });
-      console.log(res.data);
-      alert("회원가입이 완료됐습니다.");
-      navigate("/members/login");
+      if (res.data.status === 200) {
+        console.log("회원가입 성공", res.data.success);
+        alert("회원가입이 완료됐습니다.");
+        navigate("login");
+      }
+      // navigate("/login");
     } catch (err) {
       if (err instanceof AxiosError) {
         console.log("err.data", err.response?.data);

@@ -68,7 +68,7 @@ export default function Main() {
           {Array.from({ length: 4 }, (_, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center border max-h-[350px] max-w-[350px] p-30 text-center bg-gray-200 rounded-4xl font-bold"
+              className="flex flex-col items-center justify-center border max-h-[320px] max-w-[320px] p-30 text-center bg-white rounded-4xl font-bold"
             >
               {extraImg[i].emo} <br></br>
               {extraImg[i].extra}

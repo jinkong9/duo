@@ -12,7 +12,7 @@ export default function Nav() {
   const navigate = useNavigate();
 
   return (
-    <div className="font-[--font-pretendard] relative p-5 mb-10 bg-stone-300">
+    <div className="font-[--font-pretendard] relative p-4 mb-10 bg-stone-300">
       <div className="text-left absolute flex">
         <Link
           to="/"

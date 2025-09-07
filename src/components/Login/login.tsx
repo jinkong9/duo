@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 
 export default function Login() {
   interface Login {
     email: string;
     pw: string;
+  }
+
+  interface LoginRes {
+    success: string;
+    status: number;
   }
 
   const api = axios.create({
@@ -18,6 +23,8 @@ export default function Login() {
     pw: "",
   });
 
+  const navigate = useNavigate();
+
   const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -27,13 +34,18 @@ export default function Login() {
     }
 
     try {
-      const res = await api.post("/members/login", {
+      const res: AxiosResponse<LoginRes> = await api.post("/members/login", {
         email: info.email,
         pw: info.pw,
       });
-      console.log(res);
+      if (res.data.success === "True") {
+        console.log("로그인 성공", res.data.success);
+        navigate("/");
+      }
     } catch (err) {
-      console.log("err", err);
+      if (err instanceof AxiosError) {
+        console.log("err", err.response);
+      }
     }
   };
 
