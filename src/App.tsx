@@ -11,6 +11,7 @@ import Board from "./components/Board/board";
 import DetailPost from "./components/Board/detailpost";
 import Writepost from "./components/WritePost/writepost";
 import Myinfo from "./components/Myinfo/myinfo";
+import Changepw from "./components/ChangePW/changepw";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/board/:postID" element={<DetailPost />} />
         <Route path="/board/write" element={<Writepost />} />
         <Route path="/myinfo" element={<Myinfo />} />
+        <Route path="/changepw" element={<Changepw />} />
       </Routes>
     </BrowserRouter>
   );

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface Join {
   name: string;
+  nickname: string;
   email: string;
   age: string;
   password: string;
@@ -11,7 +12,7 @@ interface Join {
 }
 
 interface JoinRes {
-  success: string;
+  success: boolean;
   status: number;
 }
 
@@ -23,6 +24,7 @@ export default function Join() {
 
   const [info, setInfo] = useState<Join>({
     name: "",
+    nickname: "",
     email: "",
     age: "",
     password: "",
@@ -43,6 +45,7 @@ export default function Join() {
   const handleJoin = async () => {
     if (
       !info.name ||
+      !info.nickname ||
       !info.email ||
       !info.age ||
       !info.password ||
@@ -63,15 +66,15 @@ export default function Join() {
       const res: AxiosResponse<JoinRes> = await api.post("/members/register", {
         email: info.email,
         name: info.name,
+        nickname: info.nickname,
         age: Number(info.age),
         pw: info.password,
       });
-      if (res.data.status === 200) {
-        console.log("회원가입 성공", res.data.success);
+      if (res.data.success === true) {
+        console.log("회원가입 성공", res.data);
         alert("회원가입이 완료됐습니다.");
         navigate("login");
       }
-      // navigate("/login");
     } catch (err) {
       if (err instanceof AxiosError) {
         console.log("err.data", err.response?.data);
@@ -82,16 +85,16 @@ export default function Join() {
 
   return (
     <div className="font-[--font-pretendard] flex flex-col justify-center items-center  w-full min-h-screen bg-amber-100">
-      <p className="mb-15 font-bold text-black text-5xl text-center hover:text-amber-700 mt-4 pt-4">
+      <p className="mb-15 font-bold text-black text-5xl text-center mt-4 pt-4">
         회원가입
       </p>
-      <div className="flex flex-col border border-black-300 rounded-2xl p-10 bg-amber-100">
-        <div className="w-[500px] h-[420px] flex flex-col items-center">
+      <div className="flex flex-col border border-black-300 rounded-2xl p-10 bg-amber-50">
+        <div className="w-[600px] h-[520px] flex flex-col items-center">
           <div className="flex flex-col gap-3 items-center justify-center p-7">
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-center font-bold">이름</span>
+              <span className="w-28 text-left font-bold">이름</span>
               <input
-                className="flex-1 border border-black bg-white rounded-full p-3"
+                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
                 type="text"
                 id="name"
                 name="name"
@@ -101,9 +104,21 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-center font-bold">나이</span>
+              <span className="w-28 text-left font-bold">닉네임</span>
               <input
-                className="flex-1 border border-black bg-white rounded-full p-3"
+                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
+                type="text"
+                id="nickname"
+                name="nickname"
+                placeholder="닉네임"
+                value={info.nickname}
+                onChange={handleChange}
+              ></input>
+            </label>
+            <label className="flex items-center justify-between w-full mb-4">
+              <span className="w-28 text-left font-bold">나이</span>
+              <input
+                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
                 type="text"
                 id="age"
                 name="age"
@@ -113,9 +128,9 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-center font-bold">이메일</span>
+              <span className="w-28 text-left font-bold">이메일</span>
               <input
-                className="flex-1 border border-black bg-white rounded-full p-3"
+                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
                 type="email"
                 id="email"
                 name="email"
@@ -125,9 +140,9 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-center font-bold">비밀번호</span>
+              <span className="w-28 text-left font-bold">비밀번호</span>
               <input
-                className="flex-1 border border-black bg-white rounded-full p-3"
+                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
                 type="password"
                 id="password"
                 name="password"
@@ -137,9 +152,9 @@ export default function Join() {
               ></input>
             </label>
             <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-center font-bold">비밀번호 확인</span>
+              <span className="w-28 text-left font-bold">비밀번호 확인</span>
               <input
-                className="flex-1 border border-black bg-white rounded-full p-3"
+                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
                 type="password"
                 id="check_password"
                 name="check_password"
@@ -154,7 +169,7 @@ export default function Join() {
           <label>
             개인정보활용 동의
             <input
-              className="cursor-pointer shadow-lg p-2 ml-2"
+              className="cursor-pointer hover:scale-115 hover:shadow-lg shadow-lg p-2 ml-2"
               type="checkbox"
               checked={agree}
               onChange={(e) => {
@@ -166,7 +181,7 @@ export default function Join() {
         <div className="flex justify-center items-center mt-5">
           <button
             onClick={handleJoin}
-            className="cursor-pointer hover:shadow-xl bg-amber-300 border border-black-100 rounded-full pl-4 pr-4 pt-3 pb-3"
+            className="cursor-pointer hover:scale-102 hover:shadow-lg bg-amber-300 border border-black-100 rounded-full pl-4.5 pr-4.5 pt-3 pb-3"
           >
             회원가입
           </button>

@@ -9,7 +9,7 @@ export default function Login() {
   }
 
   interface LoginRes {
-    success: string;
+    success: boolean;
     status: number;
   }
 
@@ -38,8 +38,8 @@ export default function Login() {
         email: info.email,
         pw: info.pw,
       });
-      if (res.data.success === "True") {
-        console.log("로그인 성공", res.data.success);
+      if (res.data.success === true) {
+        console.log(res.data);
         navigate("/");
       }
     } catch (err) {
@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <div className="font-[--font-pretendard] bg-amber-100 w-full min-h-screen">
-      <p className="active:scale-95 font-bold text-black text-5xl text-center hover:text-amber-700 mt-4 pt-7">
+      <p className="active:scale-95 font-bold text-black text-5xl text-center mt-4 pt-7">
         Login
       </p>
       <form onSubmit={handlelogin}>

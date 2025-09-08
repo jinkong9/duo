@@ -1,0 +1,129 @@
+import React, { useState } from "react";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
+
+interface ChangPW {
+  oldPW: string;
+  newPW: string;
+}
+
+interface ChangePWres {
+  status: number;
+}
+
+interface relog {
+  success: boolean;
+}
+
+export default function Changepw() {
+  const [pw, setPw] = useState<ChangPW>({
+    oldPW: "",
+    newPW: "",
+  });
+
+  const api = axios.create({
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+    withCredentials: true,
+  });
+
+  const navigate = useNavigate();
+
+  const relogin = async () => {
+    if (pw.oldPW === pw.newPW) {
+      alert("기존 비밀번호와 다르게 설정해주세요.");
+      return;
+    }
+    try {
+      const res: AxiosResponse<relog> = await api.delete("members/logout");
+      if (res.data.success === true) {
+        console.log("success", res.data);
+        navigate("/login");
+      }
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        console.log("server err", err.response?.data);
+      }
+    }
+  };
+
+  const handlePW = async () => {
+    try {
+      const res: AxiosResponse<ChangePWres> = await api.patch(
+        "members/password",
+        {
+          before_password: pw.oldPW,
+          new_password: pw.newPW,
+        }
+      );
+      console.log("good", res.data);
+      if (res.data.status === 200) {
+        window.close();
+        alert("비밀번호가 변경되었습니다 ! 다시 로그인 해주세요.");
+        relogin();
+      }
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        console.log("이상해", err.response);
+      }
+    }
+  };
+
+  return (
+    <div className="bg-amber-100 min-h-screen font-[--font-pretendard]">
+      <div className="text-center font-bold mb-10">
+        <p className="pt-5 text-xl">비밀번호 변경</p>
+      </div>
+      <div className="flex flex-col justify-center items-center gap-3">
+        <p>*기존 비밀번호를 입력해주세요 .</p>
+        <div>
+          <input
+            className="border rounded-2xl p-3"
+            type="password"
+            id="beforepw"
+            name="beforepw"
+            placeholder="비밀번호를 입력해주세요."
+            onChange={(e) => {
+              setPw({
+                ...pw,
+                oldPW: e.target.value,
+              });
+            }}
+          ></input>
+        </div>
+        <p className="mt-4">*새 비밀번호를 입력해주세요 .</p>
+        <div>
+          <input
+            className="border rounded-2xl p-3"
+            type="password"
+            id="newpw"
+            name="newpw"
+            placeholder="새로운 비밀번호를 입력해주세요."
+            onChange={(e) => {
+              setPw({
+                ...pw,
+                newPW: e.target.value,
+              });
+            }}
+          ></input>
+        </div>
+        <p className="mt-4">*새 비밀번호를 한번 더 입력해주세요 .</p>
+        <div>
+          <input
+            className="border rounded-2xl p-3 mb-6"
+            type="password"
+            id="checkepw"
+            name="checkpw"
+            placeholder="새로운 비밀번호를 다시입력해주세요."
+          ></input>
+        </div>
+        <button
+          className="bg-amber-200 cursor-pointer hover:scale-105 hover:shadow-md border rounded-2xl w-20 h-10"
+          onClick={handlePW}
+          type="submit"
+        >
+          제출하기
+        </button>
+      </div>
+    </div>
+  );
+}
