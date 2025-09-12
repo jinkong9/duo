@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface Join {
-  name: string;
   nickname: string;
   email: string;
   age: string;
@@ -23,7 +22,6 @@ export default function Join() {
   });
 
   const [info, setInfo] = useState<Join>({
-    name: "",
     nickname: "",
     email: "",
     age: "",
@@ -44,7 +42,6 @@ export default function Join() {
 
   const handleJoin = async () => {
     if (
-      !info.name ||
       !info.nickname ||
       !info.email ||
       !info.age ||
@@ -65,15 +62,14 @@ export default function Join() {
     try {
       const res: AxiosResponse<JoinRes> = await api.post("/members/register", {
         email: info.email,
-        name: info.name,
-        nickname: info.nickname,
+        nickName: info.nickname,
         age: Number(info.age),
         pw: info.password,
       });
       if (res.data.success === true) {
         console.log("회원가입 성공", res.data);
         alert("회원가입이 완료됐습니다.");
-        navigate("login");
+        navigate("/login");
       }
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -85,24 +81,12 @@ export default function Join() {
 
   return (
     <div className="font-[--font-pretendard] flex flex-col justify-center items-center  w-full min-h-screen bg-amber-100">
-      <p className="mb-15 font-bold text-black text-5xl text-center mt-4 pt-4">
+      <p className="mb-15 font-bold text-black text-4xl text-center pt-10">
         회원가입
       </p>
       <div className="flex flex-col border border-black-300 rounded-2xl p-10 bg-amber-50">
-        <div className="w-[600px] h-[520px] flex flex-col items-center">
-          <div className="flex flex-col gap-3 items-center justify-center p-7">
-            <label className="flex items-center justify-between w-full mb-4">
-              <span className="w-28 text-left font-bold">이름</span>
-              <input
-                className="flex-1 border border-black bg-white rounded-full p-3 hover:scale-102 hover:shadow-lg"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Name"
-                value={info.name}
-                onChange={handleChange}
-              ></input>
-            </label>
+        <div className="w-150 h-120 flex flex-col items-center">
+          <div className="flex flex-col gap-6 items-center justify-center p-7">
             <label className="flex items-center justify-between w-full mb-4">
               <span className="w-28 text-left font-bold">닉네임</span>
               <input

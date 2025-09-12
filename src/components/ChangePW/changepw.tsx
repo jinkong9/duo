@@ -9,6 +9,7 @@ interface ChangPW {
 
 interface ChangePWres {
   status: number;
+  success: boolean;
 }
 
 interface relog {
@@ -51,12 +52,12 @@ export default function Changepw() {
       const res: AxiosResponse<ChangePWres> = await api.patch(
         "members/password",
         {
-          before_password: pw.oldPW,
-          new_password: pw.newPW,
+          oldPassword: pw.oldPW,
+          newPassword: pw.newPW,
         }
       );
       console.log("good", res.data);
-      if (res.data.status === 200) {
+      if (res.data.success === true) {
         window.close();
         alert("비밀번호가 변경되었습니다 ! 다시 로그인 해주세요.");
         relogin();

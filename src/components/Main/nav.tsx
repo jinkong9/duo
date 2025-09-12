@@ -1,40 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import { useAuth } from "../Auth/context";
 
 export default function Nav() {
-  // interface CheckLogin {
-  //   check: string;
-  // }
-  // const [login, checkLogin] = useState<CheckLogin>({
-  //   check: "Login",
-  // });
+  const { isLoading, isLogging, user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  interface Logout {
-    success: boolean;
-  }
-
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
-
-  const handlelogout = async () => {
-    try {
-      const res: AxiosResponse<Logout> = await api.delete("members/logout");
-      if (res.data.success === true) {
-        console.log(res.data);
-        window.location.reload();
-      }
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log("error", err.response);
-      }
+  const handleLogout = async () => {
+    if (!isLogging) {
+      navigate("/login");
+      return;
     }
+    await logout();
   };
 
   return (
-    <div className="font-[--font-pretendard] relative p-4 mb-10 bg-stone-300">
+    <div className="font-[--font-pretendard] relative p-4 bg-stone-300">
       <div className="text-left absolute flex">
         <Link
           to="/"
@@ -67,12 +48,14 @@ export default function Nav() {
           WITH
         </Link>
       </div>
+
       <div className="text-right flex justify-end">
-        <p
-          className="overflow-hidden w-20 mr-10 cursor-pointer font-bold"
-          onClick={handlelogout}
-        >
-          Logout
+        <p className="overflow-hidden mr-20 font-bold">
+          {isLoading
+            ? "불러오는중.."
+            : isLogging && user
+            ? `${user.nickName}님 환영합니다 !`
+            : "로그인이 필요합니다."}
         </p>
         <Link
           to="/myinfo"
@@ -80,12 +63,12 @@ export default function Nav() {
         >
           내정보
         </Link>
-        <Link
-          to="/login"
-          className="overflow-hidden mr-10 cursor-pointer font-bold"
+        <p
+          className="overflow-hidden cursor-pointer mr-10 font-bold"
+          onClick={handleLogout}
         >
-          Login
-        </Link>
+          {isLogging ? "Logout" : "Login"}
+        </p>
       </div>
     </div>
   );

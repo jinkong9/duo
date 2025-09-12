@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <div className="font-[--font-pretendard] bg-amber-100 w-full min-h-screen">
-      <p className="active:scale-95 font-bold text-black text-5xl text-center mt-4 pt-7">
+      <p className="active:scale-95 font-bold text-black text-5xl text-center pt-7">
         Login
       </p>
       <form onSubmit={handlelogin}>

@@ -12,25 +12,30 @@ import DetailPost from "./components/Board/detailpost";
 import Writepost from "./components/WritePost/writepost";
 import Myinfo from "./components/Myinfo/myinfo";
 import Changepw from "./components/ChangePW/changepw";
+import Nav from "./components/Main/nav";
+import { AuthProvider } from "./components/Auth/context";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/kitchen" element={<Kitchen />} />
-        <Route path="/join" element={<Join />} />
-        <Route path="/restroom" element={<Restroom />} />
-        <Route path="/livingroom" element={<Livingroom />} />
-        <Route path="/go" element={<Gohome />} />
-        <Route path="/board" element={<Board />} />
-        <Route path="/board/:postID" element={<DetailPost />} />
-        <Route path="/board/write" element={<Writepost />} />
-        <Route path="/myinfo" element={<Myinfo />} />
-        <Route path="/changepw" element={<Changepw />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/kitchen" element={<Kitchen />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/restroom" element={<Restroom />} />
+          <Route path="/livingroom" element={<Livingroom />} />
+          <Route path="/go" element={<Gohome />} />
+          <Route path="/board" element={<Board />} />
+          <Route path="/board/:postID" element={<DetailPost />} />
+          <Route path="/board/write" element={<Writepost />} />
+          <Route path="/myinfo" element={<Myinfo />} />
+          <Route path="/changepw" element={<Changepw />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

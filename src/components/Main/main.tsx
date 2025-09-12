@@ -42,7 +42,6 @@ export default function Main() {
   return (
     <div>
       <div className="font-[--font-pretendard] bg-amber-100 min-h-screen">
-        <Nav />
         <div className="relative items-center justify-center flex">
           <img
             className="w-[800px] h-[500px] object-cover z-0"
