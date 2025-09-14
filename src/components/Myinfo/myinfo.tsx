@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "../Main/nav";
 import icon from "../../assets/iconimg.png";
-import axios from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 interface GetTip {
   title: string;
   date: string;
   content: string;
+}
+
+interface UserData {
+  nickName: string;
+}
+
+interface ApiRes {
+  data: UserData;
 }
 
 const ChangePwPage = () => {
@@ -25,26 +33,48 @@ export default function Myinfo() {
     withCredentials: true,
   });
 
+  const [nick, setNick] = useState<UserData | null>(null);
+
+  useEffect(() => {
+    const Getname = async () => {
+      try {
+        const res: AxiosResponse<ApiRes> = await api.get("members/me");
+        if (res) {
+          setNick(res.data.data);
+        }
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          console.log(err.response);
+        }
+      }
+    };
+    Getname();
+  }, []);
+
   return (
-    <div className="bg-amber-100 min-h-screen font-[--font-pretendard]">
-      <Nav />
+    <div className="bg-amber-100 min-h-screen font-[--font-pretendard] pt-10">
       <div className="flex flex-col justify-center items-center gap-y-30">
         <div className="w-150 h-80 border ml-10 bg-amber-50 rounded-2xl text-center pt-2 font-bold">
           <p className="text-2xl">MY INFO</p>
           <div className="flex gap-x-12">
-            <div className="overflow-hidden border rounded-full w-30 h-30 mt-14 ml-8  flex justify-center">
+            <div className="overflow-hidden border rounded-full w-30 h-30 mt-14 ml-8 mr-10 flex justify-center">
               <img className="w-28 h-28" src={icon} alt="avartaIMG"></img>
             </div>
             <div className="flex flex-col mt-8 justify-center items-start font-semibold text-left">
-              <p>닉네임 : </p>
+              <div className="flex gap-x-10">
+                <p>닉네임 :</p> <p> {nick?.nickName}</p>
+              </div>
               <br></br>
-              <p>나의 이메일 : </p>
+              <p>이메일 : </p>
               <br></br>
               <p>가입일자 : </p>
               <br></br>
               <p>내가 쓴 게시물 : </p>
               <br></br>
-              <p onClick={ChangePwPage} className="cursor-pointer">
+              <p
+                onClick={ChangePwPage}
+                className="cursor-pointer hover:text-stone-700 overflow-hidden"
+              >
                 비밀번호 변경하기
               </p>
             </div>

@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from "react";
-import Nav from "../Main/nav";
+import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 interface board {
   id: number;
@@ -27,8 +27,7 @@ export default function Board() {
 
   return (
     <div className="font-[--font-pretendard] min-h-screen bg-amber-100">
-      <Nav></Nav>
-      <div>
+      <div className="pt-10">
         <p className="text-center font-bold text-2xl">TIPS BOARD</p>
       </div>
       <div className="flex justify-end">
@@ -36,7 +35,7 @@ export default function Board() {
           onClick={() => {
             WritePost();
           }}
-          className="bg-white border p-2 rounded-xl mr-10 cursor-pointer hover:scale-105 overflow:hidden"
+          className="bg-amber-200 border p-2 rounded-2xl mr-10 cursor-pointer hover:bg-amber-100 hover:scale-105 overflow:hidden"
         >
           작성하기
         </button>

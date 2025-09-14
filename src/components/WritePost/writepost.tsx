@@ -57,21 +57,12 @@ export default function Writepost() {
 
   return (
     <div className="font-[--font-pretendard] min-h-screen bg-amber-100">
-      <Nav />
-      <div className="font-bold text-2xl flex justify-center">
-        자신만의 팁을 알려주세요 !
-      </div>
+      <div className="font-bold text-2xl flex justify-center pt-10"></div>
       <div className="w-full flex flex-col justify-center items-center">
-        <div className="bg-stone-100 border-3 rounded-lg w-300 h-20 mt-20 text-center font-bold pt-5 text-3xl">
-          글쓰기 테스트
-        </div>
+        <div className="bg-stone-100 border-3 rounded-lg w-300 h-20 mt-20 text-center font-bold pt-5 text-3xl"></div>
         <div className="bg-stone-100 border-3 rounded-lg w-300 h-80 text-left font-semibold text-xl p-5 flex flex-col gap-y-5">
           <div className="text-right mb-4 mr-5">{daydate}</div>
-          <div className="m-4">
-            글쓰기 테스트글쓰기 테스트글쓰기 테스트글쓰기 테스트글쓰기
-            테스트글쓰기 테스트글쓰기 테스트글쓰기 테스트글쓰기 테스트글쓰기
-            테스트글쓰기 테스트
-          </div>
+          <div className="m-4"></div>
         </div>
       </div>
       <div className="flex justify-center mt-8">

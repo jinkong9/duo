@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios, { AxiosError, type AxiosResponse } from "axios";
+import { useAuth } from "../Auth/context";
 
 export default function Login() {
   interface Login {
@@ -11,6 +12,9 @@ export default function Login() {
   interface LoginRes {
     success: boolean;
     status: number;
+    data: {
+      nickName: string;
+    };
   }
 
   const api = axios.create({
@@ -23,6 +27,7 @@ export default function Login() {
     pw: "",
   });
 
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,13 +43,21 @@ export default function Login() {
         email: info.email,
         pw: info.pw,
       });
-      if (res.data.success === true) {
-        console.log(res.data);
-        navigate("/");
+      if (res.data.success == true) {
+        const nickres: AxiosResponse<LoginRes> = await api.get("/members/me");
+        console.log(nickres.data.data);
+        const userData = nickres.data.data;
+        if (userData) {
+          login(userData);
+          navigate("/");
+        } else {
+          alert("불러오기 오류");
+        }
       }
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log("err", err.response);
+        console.log(err.response?.data?.message);
+        alert(err.response?.data?.message);
       }
     }
   };
