@@ -69,7 +69,7 @@ export default function Login() {
       </p>
       <form onSubmit={handlelogin}>
         <div className="mt-10 flex justify-center items-center">
-          <div className="w-[500px] h-[400px] rounded-3xl border border-black-100 mt-10 p-5 flex flex-col items-center justify-center mt-10">
+          <div className="w-150 h-100 rounded-3xl border border-stone-400 mt-10 p-5 flex flex-col items-center justify-center mt-10">
             <div className="flex items-baseline gap-x-4 mb-6">
               <label className="flex items-center justify-between w-full mb-4">
                 <span className="w-18 text-center font-bold">E-Mail</span>

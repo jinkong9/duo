@@ -1,10 +1,36 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/context";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+
+interface AuthRes {
+  success: boolean;
+}
 
 export default function Nav() {
   const { isLoading, isLogging, user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const api = axios.create({
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+    withCredentials: true,
+  });
+
+  const Authpage = async () => {
+    try {
+      const res: AxiosResponse<AuthRes> = await api.get("members/me");
+      if (res.data.success === true) {
+        console.log(res.data);
+        navigate("/myinfo");
+      }
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        console.log(err.response);
+        alert("로그인이 필요합니다.");
+        return;
+      }
+    }
+  };
 
   const handleLogout = async () => {
     if (!isLogging) {
@@ -55,14 +81,14 @@ export default function Nav() {
             ? "불러오는중.."
             : isLogging && user
             ? `${user.nickName}님 환영합니다 !`
-            : "로그인이 필요합니다."}
+            : ""}
         </p>
-        <Link
-          to="/myinfo"
+        <p
+          onClick={Authpage}
           className="overflow-hidden mr-15 cursor-pointer font-bold"
         >
           내정보
-        </Link>
+        </p>
         <p
           className="overflow-hidden cursor-pointer mr-10 font-bold"
           onClick={handleLogout}

@@ -30,7 +30,7 @@ function App() {
           <Route path="/go" element={<Gohome />} />
           <Route path="/board" element={<Board />} />
           <Route path="/board/:postID" element={<DetailPost />} />
-          <Route path="/board/write" element={<Writepost />} />
+          <Route path="/board/write/:categoryID" element={<Writepost />} />
           <Route path="/myinfo" element={<Myinfo />} />
           <Route path="/changepw" element={<Changepw />} />
         </Routes>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
 interface board {
@@ -18,11 +18,13 @@ export default function Board() {
   ];
 
   const navigate = useNavigate();
+  const { categoryID } = useParams<{ categoryID: string }>();
+
   const GoPost = (id: number) => {
     navigate(`/board/${id}`);
   };
   const WritePost = () => {
-    navigate("/board/write");
+    navigate(`/write/${categoryID}`);
   };
 
   return (

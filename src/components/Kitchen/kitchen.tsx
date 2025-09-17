@@ -27,8 +27,7 @@ export default function Kitchen() {
   };
 
   return (
-    <div className="font-[--font-pretendard]">
-      <Nav />
+    <div className="font-[--font-pretendard] pt-10">
       <a className="ml-10 text-2xl font-bold">주방 Tips !</a>
       <div className="flex items-left">
         <a

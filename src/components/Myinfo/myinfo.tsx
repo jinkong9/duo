@@ -62,7 +62,8 @@ export default function Myinfo() {
             </div>
             <div className="flex flex-col mt-8 justify-center items-start font-semibold text-left">
               <div className="flex gap-x-10">
-                <p>닉네임 :</p> <p> {nick?.nickName}</p>
+                <p>닉네임 </p>
+                <p>:</p> <p> {nick?.nickName}</p>
               </div>
               <br></br>
               <p>이메일 : </p>

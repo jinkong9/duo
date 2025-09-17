@@ -1,92 +1,111 @@
 import React from "react";
-import Nav from "./nav";
-import { FaHome, FaCoins, FaCalendarAlt } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 
-export default function Main() {
-  interface Extra {
-    id: number;
-    extra: string;
-    emo: React.JSX.Element;
-  }
+interface board {
+  id: number;
+  title: string;
+  content: string;
+  date: string;
+}
 
-  const extraImg: Extra[] = [
+export default function Main() {
+  const dummy: board[] = [
     {
       id: 1,
-      extra: "자취방에서 유용하게",
-      emo: <FaHome />,
+      title: "일번제목입니다",
+      content:
+        "일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다일번입니다",
+      date: "2025-09-01",
     },
     {
       id: 2,
-      extra: "자취생을 위해 절약하며 ",
-      emo: <FaCoins />,
+      title: "이번제목입니다",
+      content: "일번입니다일번입니다일번입니다일번입니다",
+      date: "2025-09-02",
     },
     {
       id: 3,
-      extra: "모든 것을 계획적으로",
-      emo: <FaCalendarAlt />,
+      title: "삼번제목입니다",
+      content: "일번입니다일번입니다일번입니다일번입니다",
+      date: "2025-09-03",
     },
     {
       id: 4,
-      extra: "다른 사람들과 공유",
-      emo: <FaPeopleGroup />,
+      title: "사번제목입니다",
+      content: "일번입니다일번입니다일번입니다일번입니다",
+      date: "2025-09-03",
     },
   ];
 
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 700,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    centerPadding: "1%",
+    arrows: true,
+  };
+
   const navigate = useNavigate();
   const start = () => {
-    navigate("/kitchen");
+    navigate("/board");
   };
 
   return (
-    <div>
-      <div className="font-[--font-pretendard] bg-amber-100 min-h-screen">
-        <div className="relative items-center justify-center flex">
-          <img
-            className="w-[800px] h-[500px] object-cover z-0"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_CKHoARum6olaE82TFQ94QlEBxDYUzW5S4lQ61ASGGhcOxSx_6jcnmnNP6e-kP7q-IvFAmmWp5vw3yHmUT-p6Ndw5Gcl7DyD7ozKjBGAP_pvmp3ewlYjDY8PUu-hnQtYZKt6P07DAi2uOQzvtOwyGRj0eLGovr_cWIYxADThK9kbEUyaxgjFIf2bgWPgEPag9DvSURJinlk73vF1QvwgUKQI8oKYVI7zsq-VJ5xVLKeXQBqJLeARhIAoUf3S6Gimx2rVKBmVvUawF"
-            alt="main pic"
-          ></img>
-          <h2 className="absolute top-[350px] font-bold text-2xl">
-            ALIVE ALONE !
-          </h2>
+    <div className="font-[--font-pretendard] bg-amber-100 min-h-screen">
+      <div className="flex justify-center items-center pt-15">
+        <div className="w-300 h-150 bg-stone-200 items-center justify-center flex flex-col gap-y-5">
+          <h2 className="font-bold text-2xl mt-10">TODAY'S BEST TIP</h2>
+          <div className="w-200 h-100 border border-black">
+            <div className="text-center border-2 border-b-black p-4">
+              {dummy[0].title}
+            </div>
+            <div className="text-left p-5">{dummy[0].content}</div>
+          </div>
           <button
             onClick={start}
-            className="hover:shadow-2xl hover:bg-stone-400 font-bold cursor-pointer absolute bg-stone-300 top-[400px] p-6 rounded-full z-10"
+            className="hover:shadow-2xl hover:bg-stone-400 font-bold cursor-pointer bg-stone-300 p-4 rounded-full m-4"
           >
             Get Start
           </button>
         </div>
-        <div>
-          <h2 className="mt-10 text-center font-bold text-2xl">
-            자취생을 위한 다양한 꿀팁 서비스
-          </h2>
-        </div>
-        <div className="flex items-center justify-center mt-10 grid-cols-2 gap-15">
-          {Array.from({ length: 4 }, (_, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center justify-center border max-h-[320px] max-w-[320px] p-30 text-center bg-white rounded-4xl font-bold"
-            >
-              {extraImg[i].emo} <br></br>
-              {extraImg[i].extra}
-            </div> //배열로 그림만 넣을거면 유지
-          ))}
-        </div>
-        <div className="mt-20">
-          <h2 className="font-bold text-2xl text-center mb-20">
-            {" "}
-            항상 도움이 되고 옆에서 함께하는 서비스가 되기위해 노력하겠습니다.
-          </h2>
-        </div>
-        <br></br>
       </div>
+      <div>
+        <h2 className="mt-10 text-center font-bold text-2xl">
+          자취생을 위한 다양한 꿀팁 서비스
+        </h2>
+      </div>
+      <div className="w-full max-w-350 mx-auto my-10 p-10 bg-stone-300 shadow-lg rounded-lg text-center text-xl font-bold">
+        오늘의 TIP{" "}
+        <Slider {...settings}>
+          {dummy.map((item) => (
+            <div key={item.id} className="border-gray-300 rounded-3xl p-3">
+              <div className="bg-white h-10 border-b text-center flex items-center justify-center p-7">
+                <p className="text-xl font-bold">{item.title}</p>
+              </div>
+              <div className="bg-white h-50 text-center text-sm line-clamp-4 flex items-center justify-center p-2">
+                {item.content}
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
+      <div className="mt-20">
+        <h2 className="font-bold text-2xl text-center mb-20">
+          {" "}
+          항상 도움이 되고 옆에서 함께하는 서비스가 되기위해 노력하겠습니다.
+        </h2>
+      </div>
+      <br></br>
       <footer className="bg-amber-50 flex items-center justify-center border h-[200px]">
         <div className="font-bold text-2xl text-center">
           Copyright@ ALIVE ALONE
         </div>
-      </footer>
+      </footer>{" "}
     </div>
   );
 }

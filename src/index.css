@@ -130,3 +130,7 @@
     @apply bg-background text-foreground;
   }
 }
+.slick-slider .slick-prev::before,
+.slick-slider .slick-next::before {
+  color: black;
+}

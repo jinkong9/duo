@@ -26,8 +26,7 @@ export default function Restroom() {
   };
 
   return (
-    <div className="font-[--font-pretendard]">
-      <Nav />
+    <div className="font-[--font-pretendard] pt-10">
       <a className="ml-10 text-2xl font-bold">욕실 Tips !</a>
       <div className="flex items-left">
         <a
