@@ -70,23 +70,23 @@ export default function Writepost() {
           <input
             className="w-full h-full border rounded-lg text-center"
             type="text"
-            name="title" // 👈 name 속성 추가
-            value={post.title} // 👈 state와 연결
-            onChange={handleInputChange} // 👈 변경 이벤트 핸들러 연결
+            name="title"
+            value={post.title}
+            onChange={handleInputChange}
             placeholder="제목을 입력하세요"
           />
         </div>
         <div className="bg-stone-100 border-3 rounded-lg w-300 h-80 text-left font-semibold text-xl flex flex-col gap-y-5">
           <div className="text-right mr-5">{daydate}</div>
           <div className="h-70">
-            <input
-              className="w-full h-full border rounded-lg p-5"
-              type="text"
+            <textarea
+              className="w-full h-full border rounded-lg p-5 resize-none"
               name="content"
               value={post.content}
               onChange={handleInputChange}
               placeholder="내용을 입력하세요"
-            ></input>
+              wrap="soft"
+            />
           </div>
         </div>
       </div>

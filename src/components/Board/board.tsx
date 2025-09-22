@@ -1,31 +1,53 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import axios, { type AxiosResponse } from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
 interface board {
   id: number;
   title: string;
-  date: string;
+  createdAt: string;
+}
+
+interface BoardAPI {
+  data: {
+    content: board[];
+  };
 }
 
 export default function Board() {
   const header = ["ID", "TITLE", "DATE"];
-  const dummy: board[] = [
-    { id: 1, title: "일번제목입니다", date: "2025-09-01" },
-    { id: 2, title: "이번제목입니다", date: "2025-09-02" },
-    { id: 3, title: "삼번제목입니다", date: "2025-09-03" },
-  ];
+  const [post, setPost] = useState<board[]>([]);
 
   const navigate = useNavigate();
   const { categoryID } = useParams<{ categoryID: string }>();
 
-  const GoPost = (id: number) => {
-    navigate(`/board/${id}`);
+  const GoPost = (postID: number) => {
+    navigate(`/board/${categoryID}/${postID}`);
   };
   const WritePost = () => {
-    navigate(`/write/${categoryID}`);
+    navigate(`/board/${categoryID}/write`);
   };
+
+  const api = axios.create({
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+    withCredentials: true,
+  });
+
+  useEffect(() => {
+    const GetPost = async () => {
+      try {
+        const res: AxiosResponse<BoardAPI> = await api.get(
+          `categories/${categoryID}/boards`
+        );
+        console.log("s", res);
+        setPost(res.data.data.content);
+      } catch (err) {
+        console.log("err", err);
+      }
+    };
+    GetPost();
+  }, [categoryID]);
 
   return (
     <div className="font-[--font-pretendard] min-h-screen bg-amber-100">
@@ -55,7 +77,7 @@ export default function Board() {
               </tr>
             </thead>
             <tbody>
-              {dummy.map((item) => (
+              {post.map((item) => (
                 <tr
                   key={item.id}
                   className="border-b border-gray-200 hover:bg-gray-50 cursor-pointer"
@@ -65,7 +87,7 @@ export default function Board() {
                 >
                   <td className="p-4">{item.id}</td>
                   <td className="p-4">{item.title}</td>
-                  <td className="p-4">{item.date}</td>
+                  <td className="p-4">{item.createdAt}</td>
                 </tr>
               ))}
             </tbody>

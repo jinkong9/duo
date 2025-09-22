@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/context";
 import axios, { AxiosError, type AxiosResponse } from "axios";
@@ -7,14 +7,39 @@ interface AuthRes {
   success: boolean;
 }
 
+interface CategoryItem {
+  id: number;
+  name: string;
+  boardCount: number;
+}
+
+interface CategoryResponse {
+  data: CategoryItem[];
+}
+
 export default function Nav() {
   const { isLoading, isLogging, user, logout } = useAuth();
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const navigate = useNavigate();
 
   const api = axios.create({
     baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
     withCredentials: true,
   });
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res: AxiosResponse<CategoryResponse> = await api.get(
+          "categories"
+        );
+        console.log("Categories", res.data.data);
+        setCategories(res.data.data);
+      } catch (err) {
+        console.log("카테고리 로딩 실패:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const Authpage = async () => {
     try {
@@ -42,37 +67,28 @@ export default function Nav() {
 
   return (
     <div className="font-[--font-pretendard] relative p-4 bg-stone-300">
-      <div className="text-left absolute flex">
+      <div className="text-left absolute flex space-x-8">
         <Link
           to="/"
           className="overflow-hidden ml-5 text-xl text-center font-bold cursor-pointer"
         >
           ALIVE ALONE
         </Link>
-        <Link
-          to="/kitchen"
-          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
-        >
-          주방
-        </Link>
-        <Link
-          to="/restroom"
-          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
-        >
-          욕실
-        </Link>
-        <Link
-          to="/livingroom"
-          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
-        >
-          거실
-        </Link>
-        <Link
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            to={`/board/${category.id}`}
+            className="font-bold text-center cursor-pointer hover:scale-110"
+          >
+            {category.name}
+          </Link>
+        ))}
+        {/* <Link
           to="/board"
-          className="overflow-hidden ml-10 font-bold text-center cursor-pointer hover:scale-110"
+          className="overflow-hidden font-bold text-center cursor-pointer hover:scale-110"
         >
           WITH
-        </Link>
+        </Link> */}
       </div>
 
       <div className="text-right flex justify-end">

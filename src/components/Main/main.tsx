@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
+import axios, { AxiosError } from "axios";
 
 interface board {
-  id: number;
+  id: number | null;
   title: string;
   content: string;
   date: string;
 }
 
 export default function Main() {
+  const api = axios.create({
+    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+    withCredentials: true,
+  });
+
+  const [bestTip, setBestTip] = useState<board>({
+    id: null,
+    title: "",
+    content: "",
+    date: "",
+  });
+
   const dummy: board[] = [
     {
       id: 1,
@@ -53,6 +66,17 @@ export default function Main() {
   const navigate = useNavigate();
   const start = () => {
     navigate("/board");
+  };
+
+  const handleBestTip = async () => {
+    try {
+      const res = await api.get("boards/best");
+      console.log(res.data);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        console.log(err.response);
+      }
+    }
   };
 
   return (
