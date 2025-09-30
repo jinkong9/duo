@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 interface ChangPW {
   oldPW: string;
   newPW: string;
+  ConfirmPW: string;
 }
 
 interface ChangePWres {
@@ -12,42 +13,47 @@ interface ChangePWres {
   success: boolean;
 }
 
-interface relog {
-  success: boolean;
-}
+const api = axios.create({
+  baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
+  withCredentials: true,
+});
 
 export default function Changepw() {
   const [pw, setPw] = useState<ChangPW>({
     oldPW: "",
     newPW: "",
+    ConfirmPW: "",
   });
 
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPw((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const navigate = useNavigate();
+  const handlePopUp = () => {
+    if (window.opener) {
+      window.opener.postMessage("ChangePW", "*");
+    }
+    window.close();
+  };
 
-  const relogin = async () => {
+  const handlePW = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (pw.oldPW === pw.newPW) {
       alert("기존 비밀번호와 다르게 설정해주세요.");
       return;
     }
-    try {
-      const res: AxiosResponse<relog> = await api.delete("members/logout");
-      if (res.data.success === true) {
-        console.log("success", res.data);
-        navigate("/login");
-      }
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log("server err", err.response?.data);
-      }
+    if (!pw.oldPW || !pw.newPW || !pw.ConfirmPW) {
+      alert("모든 칸을 채워주세요.");
+      return;
     }
-  };
-
-  const handlePW = async () => {
+    if (pw.newPW !== pw.ConfirmPW) {
+      alert("새로운 비밀번호가 일치하지 않습니다.");
+      return;
+    }
     try {
       const res: AxiosResponse<ChangePWres> = await api.patch(
         "members/password",
@@ -58,13 +64,11 @@ export default function Changepw() {
       );
       console.log("good", res.data);
       if (res.data.success === true) {
-        window.close();
-        alert("비밀번호가 변경되었습니다 ! 다시 로그인 해주세요.");
-        relogin();
+        handlePopUp();
       }
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log("이상해", err.response);
+        console.log("비번바꾸기 오류", err.response);
       }
     }
   };
@@ -74,57 +78,50 @@ export default function Changepw() {
       <div className="text-center font-bold mb-10">
         <p className="pt-5 text-xl">비밀번호 변경</p>
       </div>
-      <div className="flex flex-col justify-center items-center gap-3">
+      <form
+        onSubmit={handlePW}
+        className="flex flex-col justify-center items-center gap-3"
+      >
         <p>*기존 비밀번호를 입력해주세요 .</p>
         <div>
           <input
-            className="border rounded-2xl p-3"
+            className="border border-gray-200 hover:border-black rounded-2xl p-3 bg-white"
             type="password"
-            id="beforepw"
-            name="beforepw"
+            id="oldPW"
+            name="oldPW"
             placeholder="비밀번호를 입력해주세요."
-            onChange={(e) => {
-              setPw({
-                ...pw,
-                oldPW: e.target.value,
-              });
-            }}
+            onChange={handleChange}
           ></input>
         </div>
         <p className="mt-4">*새 비밀번호를 입력해주세요 .</p>
         <div>
           <input
-            className="border rounded-2xl p-3"
+            className="border border-gray-200 hover:border-black rounded-2xl p-3 bg-white"
             type="password"
-            id="newpw"
-            name="newpw"
+            id="newPW"
+            name="newPW"
             placeholder="새로운 비밀번호를 입력해주세요."
-            onChange={(e) => {
-              setPw({
-                ...pw,
-                newPW: e.target.value,
-              });
-            }}
+            onChange={handleChange}
           ></input>
         </div>
         <p className="mt-4">*새 비밀번호를 한번 더 입력해주세요 .</p>
         <div>
           <input
-            className="border rounded-2xl p-3 mb-6"
+            className="border border-gray-200 hover:border-black rounded-2xl p-3 mb-6 bg-white"
             type="password"
-            id="checkepw"
-            name="checkpw"
+            id="ConfirmPW"
+            name="ConfirmPW"
             placeholder="새로운 비밀번호를 다시입력해주세요."
+            onChange={handleChange}
           ></input>
         </div>
         <button
           className="bg-amber-200 cursor-pointer hover:scale-105 hover:shadow-md border rounded-2xl w-20 h-10"
-          onClick={handlePW}
           type="submit"
         >
           제출하기
         </button>
-      </div>
+      </form>
     </div>
   );
 }

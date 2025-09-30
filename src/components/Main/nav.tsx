@@ -27,7 +27,7 @@ export default function Nav() {
     withCredentials: true,
   });
   useEffect(() => {
-    const fetchCategories = async () => {
+    const GetCategories = async () => {
       try {
         const res: AxiosResponse<CategoryResponse> = await api.get(
           "categories"
@@ -38,35 +38,29 @@ export default function Nav() {
         console.log("카테고리 로딩 실패:", err);
       }
     };
-    fetchCategories();
+    GetCategories();
   }, []);
 
-  const Authpage = async () => {
-    try {
-      const res: AxiosResponse<AuthRes> = await api.get("members/me");
-      if (res.data.success === true) {
-        console.log(res.data);
-        navigate("/myinfo");
-      }
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log(err.response);
-        alert("로그인이 필요합니다.");
-        return;
-      }
+  const handleMyInfoClick = () => {
+    if (isLogging) {
+      navigate("/myinfo");
+    } else {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
     }
   };
 
   const handleLogout = async () => {
-    if (!isLogging) {
+    if (isLogging) {
+      await logout();
       navigate("/login");
-      return;
+    } else {
+      navigate("/login");
     }
-    await logout();
   };
 
   return (
-    <div className="font-[--font-pretendard] relative p-4 bg-stone-300">
+    <div className="font-[--font-pretendard] relative p-4 bg-[#FCFFC1]">
       <div className="text-left absolute flex space-x-8">
         <Link
           to="/"
@@ -83,12 +77,6 @@ export default function Nav() {
             {category.name}
           </Link>
         ))}
-        {/* <Link
-          to="/board"
-          className="overflow-hidden font-bold text-center cursor-pointer hover:scale-110"
-        >
-          WITH
-        </Link> */}
       </div>
 
       <div className="text-right flex justify-end">
@@ -100,7 +88,7 @@ export default function Nav() {
             : ""}
         </p>
         <p
-          onClick={Authpage}
+          onClick={handleMyInfoClick}
           className="overflow-hidden mr-15 cursor-pointer font-bold"
         >
           내정보

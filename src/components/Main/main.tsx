@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 
 interface board {
   id: number | null;
@@ -12,18 +12,24 @@ interface board {
   date: string;
 }
 
+interface Best {
+  boardId: number | null;
+  title: string;
+  createdAt: string;
+}
+
+interface APIBest {
+  data: Best[];
+}
+
 export default function Main() {
   const api = axios.create({
     baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
     withCredentials: true,
   });
 
-  const [bestTip, setBestTip] = useState<board>({
-    id: null,
-    title: "",
-    content: "",
-    date: "",
-  });
+  // const [TodayTip, setTodayTip] = useState<Today[]>([]);
+  const [bestTip, setBestTip] = useState<Best | null>(null);
 
   const dummy: board[] = [
     {
@@ -65,34 +71,58 @@ export default function Main() {
 
   const navigate = useNavigate();
   const start = () => {
-    navigate("/board");
+    navigate("/board/1");
   };
 
-  const handleBestTip = async () => {
-    try {
-      const res = await api.get("boards/best");
-      console.log(res.data);
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log(err.response);
+  // useEffect(() => {
+  //   const handleTodayTip = async () => {
+  //     try {
+  //       const res: AxiosResponse<APIToday> = await api.get("boards/today");
+  //       console.log("오늘일기", res.data.data);
+  //       setTodayTip(res.data.data);
+  //     } catch (err) {
+  //       if (err instanceof AxiosError) {
+  //         console.log(err.response);
+  //       }
+  //     }
+  //   };
+  //   handleTodayTip();
+  // }, []);
+
+  useEffect(() => {
+    const GetBestTip = async () => {
+      try {
+        const res: AxiosResponse<APIBest> = await api.get("boards/best");
+        console.log("BestTip", res.data.data);
+        const Bestdata = res.data.data;
+        if (Bestdata && Bestdata.length > 0) {
+          setBestTip(Bestdata[0]);
+        }
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          console.log("API 오류:", err.response);
+        }
       }
-    }
-  };
-
+    };
+    GetBestTip();
+  }, []);
+  //https://colorhunt.co/
   return (
-    <div className="font-[--font-pretendard] bg-amber-100 min-h-screen">
+    <div className="font-[--font-pretendard] bg-[#FFE893] min-h-screen">
       <div className="flex justify-center items-center pt-15">
-        <div className="w-300 h-150 bg-stone-200 items-center justify-center flex flex-col gap-y-5">
-          <h2 className="font-bold text-2xl mt-10">TODAY'S BEST TIP</h2>
-          <div className="w-200 h-100 border border-black">
-            <div className="text-center border-2 border-b-black p-4">
-              {dummy[0].title}
+        <div className="w-300 h-150 items-center justify-center flex flex-col gap-y-5">
+          <h2 className="font-bold text-2xl mt-10">BEST TIP</h2>
+          <div className="w-200 h-100 border border-bg-[#FFE893] bg-[#FCFFC1] rounded-xl">
+            <div className="text-center border-1 border-b-black p-4">
+              {bestTip ? bestTip.title : "불러오는 중..."}
             </div>
-            <div className="text-left p-5">{dummy[0].content}</div>
+            <div className="text-left p-5">
+              {bestTip ? bestTip.createdAt : ""}
+            </div>
           </div>
           <button
             onClick={start}
-            className="hover:shadow-2xl hover:bg-stone-400 font-bold cursor-pointer bg-stone-300 p-4 rounded-full m-4"
+            className="hover:shadow-2xl hover:bg-stone-400 font-bold cursor-pointer bg-[#FCFFC1] p-4 rounded-full m-4"
           >
             Get Start
           </button>
@@ -103,7 +133,7 @@ export default function Main() {
           자취생을 위한 다양한 꿀팁 서비스
         </h2>
       </div>
-      <div className="w-full max-w-350 mx-auto my-10 p-10 bg-stone-300 shadow-lg rounded-lg text-center text-xl font-bold">
+      <div className="w-full max-w-350 mx-auto my-10 p-10 bg-[#FCFFC1] shadow-lg rounded-lg text-center text-xl font-bold">
         오늘의 TIP{" "}
         <Slider {...settings}>
           {dummy.map((item) => (
@@ -125,7 +155,7 @@ export default function Main() {
         </h2>
       </div>
       <br></br>
-      <footer className="bg-amber-50 flex items-center justify-center border h-[200px]">
+      <footer className="bg-[#FFE893] flex items-center justify-center border h-[200px]">
         <div className="font-bold text-2xl text-center">
           Copyright@ ALIVE ALONE
         </div>

@@ -1,5 +1,4 @@
 import React, { useState, type ChangeEvent } from "react";
-import Nav from "../Main/nav";
 import dayjs from "dayjs";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -53,7 +52,7 @@ export default function Writepost() {
       if (res.data.success === true) {
         console.log(res.data);
         alert("게시물 업로드 완료 !");
-        navigate("/board");
+        navigate("/board/1");
       }
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -93,7 +92,7 @@ export default function Writepost() {
       <div className="flex justify-center mt-8">
         <button
           onClick={submitPost}
-          className="bg-amber-200 font-semibold border border-2 p-2 rounded-xl mr-10 cursor-pointer hover:scale-105 overflow:hidden"
+          className="bg-amber-200 font-semibold border-2 p-2 rounded-xl mr-10 cursor-pointer hover:scale-105 overflow:hidden"
         >
           작성하기
         </button>

@@ -43,16 +43,11 @@ export default function Login() {
         email: info.email,
         pw: info.pw,
       });
-      if (res.data.success == true) {
-        const nickres: AxiosResponse<LoginRes> = await api.get("/members/me");
-        console.log(nickres.data.data);
-        const userData = nickres.data.data;
-        if (userData) {
-          login(userData);
-          navigate("/");
-        } else {
-          alert("불러오기 오류");
-        }
+      if (res.data.success) {
+        login(res.data.data);
+        navigate("/");
+      } else {
+        alert("로그인 실패");
       }
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -69,7 +64,7 @@ export default function Login() {
       </p>
       <form onSubmit={handlelogin}>
         <div className="mt-10 flex justify-center items-center">
-          <div className="w-150 h-100 rounded-3xl border border-stone-400 mt-10 p-5 flex flex-col items-center justify-center mt-10">
+          <div className="w-150 h-100 rounded-3xl border border-stone-400 mt-10 p-5 flex flex-col items-center justify-center">
             <div className="flex items-baseline gap-x-4 mb-6">
               <label className="flex items-center justify-between w-full mb-4">
                 <span className="w-18 text-center font-bold">E-Mail</span>

@@ -100,10 +100,10 @@ export default function DetailPost() {
     GetComment();
   }, []);
 
-  const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleWriteComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setComment((prevComment) => ({
-      ...prevComment,
+    setComment((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
@@ -168,7 +168,9 @@ export default function DetailPost() {
         </div>
         <div className="bg-stone-100 border-3 rounded-lg w-300 h-80 text-left font-semibold p-5 flex flex-col gap-5">
           <div className="w-full text-right text-l">{post?.createdAt}</div>
-          <div className="w-full text-left text-xl p-2">{post?.content}</div>
+          <div className="w-full text-left text-xl p-2 whitespace-pre-line">
+            {post?.content}
+          </div>
         </div>
         <div className="w-270 mx-auto bg-white mt-5 border-2 flex flex-col mb-5">
           <div className="text-center border-2 p-5 bg-stone-500">댓글쓰기</div>
@@ -177,7 +179,7 @@ export default function DetailPost() {
               className="w-255 h-full border p-5 resize-none"
               name="comment"
               value={comment.comment}
-              onChange={handleCommentChange}
+              onChange={handleWriteComment}
               placeholder="타인을 비방하는 글이나 욕설은 금지합니다."
               wrap="soft"
             ></textarea>

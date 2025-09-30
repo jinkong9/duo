@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useState,
   type ReactNode,
-  type FC,
 } from "react";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 
@@ -68,7 +67,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await api.delete("members/logout");
+      const res = await api.delete("members/logout");
+      console.log("뇸", res);
     } catch (error) {
       console.error("로그아웃 API 오류", error);
     } finally {
