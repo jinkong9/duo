@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useAuth } from "../Auth/context";
@@ -17,20 +17,30 @@ export default function Login() {
     };
   }
 
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
-
   const [info, setInfo] = useState<Login>({
     email: "",
     pw: "",
   });
 
-  const { login } = useAuth();
+  const { login, isLogging } = useAuth();
   const navigate = useNavigate();
 
-  const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (isLogging) {
+      navigate("/");
+    }
+  }, [isLogging, navigate]);
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!info.email || !info.pw) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+    login(info);
+  };
+
+  /* const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!info.email || !info.pw) {
@@ -55,14 +65,13 @@ export default function Login() {
         alert(err.response?.data?.message);
       }
     }
-  };
-
+  }; */
   return (
     <div className="font-[--font-pretendard] bg-amber-100 w-full min-h-screen">
       <p className="active:scale-95 font-bold text-black text-5xl text-center pt-7">
         Login
       </p>
-      <form onSubmit={handlelogin}>
+      <form onSubmit={handleLogin}>
         <div className="mt-10 flex justify-center items-center">
           <div className="w-150 h-100 rounded-3xl border border-stone-400 mt-10 p-5 flex flex-col items-center justify-center">
             <div className="flex items-baseline gap-x-4 mb-6">

@@ -1,11 +1,6 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import { createContext, useContext, type ReactNode } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Getme, LoginAPI, LogoutAPI, type LoginBody } from "./members";
 
 interface User {
   nickName: string;
@@ -19,7 +14,7 @@ interface AuthContextType {
   isLogging: boolean;
   user: User | null;
   isLoading: boolean;
-  login: (userData: User) => void;
+  login: (info: LoginBody) => void;
   logout: () => void;
 }
 
@@ -30,59 +25,41 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
+  const queryClient = useQueryClient();
+
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["me"],
+    queryFn: Getme,
+    retry: false,
+    staleTime: Infinity,
   });
 
-  const [isLogging, setIsLogging] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const login = useMutation({
+    mutationFn: LoginAPI,
+    onSuccess: () => {
+      console.log("로그인 성공");
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+    },
+    onError: (err: Error) => {
+      console.error("로그인 실패", err);
+      alert("이메일이나 비밀번호를 확인해주세요.");
+    },
+  });
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const res: AxiosResponse<ApiResponse> = await api.get("members/me");
-        if (res.data && res.data.data) {
-          setIsLogging(true);
-          setUser(res.data.data);
-        }
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          console.log("정보 불러오기 실패", err);
-          setIsLogging(false);
-          setUser(null);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    checkAuthStatus();
-  }, []);
-
-  const login = (userData: User) => {
-    setIsLogging(true);
-    setUser(userData);
-  };
-
-  const logout = async () => {
-    try {
-      const res = await api.delete("members/logout");
-      console.log("뇸", res);
-    } catch (error) {
-      console.error("로그아웃 API 오류", error);
-    } finally {
-      setIsLogging(false);
-      setUser(null);
-    }
-  };
+  const logout = useMutation({
+    mutationFn: LogoutAPI,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ["me"] });
+      console.log("로그아웃성공");
+    },
+  });
 
   const value: AuthContextType = {
-    isLogging,
+    user: user || null,
+    isLogging: !!user,
     isLoading,
-    user,
-    login,
-    logout,
+    login: (info) => login.mutate(info),
+    logout: () => logout.mutate(),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

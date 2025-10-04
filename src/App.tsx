@@ -19,8 +19,8 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
@@ -40,8 +40,8 @@ function App() {
             <Route path="/changepw" element={<Changepw />} />
           </Routes>
         </BrowserRouter>
-      </QueryClientProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
