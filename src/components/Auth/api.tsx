@@ -54,6 +54,7 @@ api.interceptors.response.use(
           failedStep.push({ resolve: () => resolve(), reject }); // resolve, reject 큐에 추가
         }).then(() => api(originalRequest)); //재발급 종료 후 진행
       }
+
       originalRequest.retry = true; //재시도 처리중
       isRefreshing = true; // 재발급 시작
 
