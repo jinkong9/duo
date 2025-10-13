@@ -1,32 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Nav from "../Main/nav";
+import React, { useEffect } from "react";
 import icon from "../../assets/iconimg.png";
-import axios, { AxiosError, type AxiosResponse } from "axios";
-import { Link, useNavigate } from "react-router-dom";
-
-interface MyPost {
-  boardId: number;
-  title: string;
-  createdAt: string;
-  categoryId: number;
-  categoryName: string;
-}
-
-interface APIMyPost {
-  data: { content: MyPost[] };
-  totalElements: number;
-}
-
-interface Info {
-  nickName: string;
-  email: string;
-  joinedAt: string;
-  boardCount: number;
-}
-
-interface APIInfo {
-  data: Info;
-}
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import api from "../Auth/api";
+import {
+  getMyPosts,
+  getMyInfo,
+  type MyPost,
+  type Info,
+} from "../Myinfo/myinfoAPI";
 
 const ChangePwPage = () => {
   const width = 500;
@@ -38,94 +21,97 @@ const ChangePwPage = () => {
 };
 
 export default function Myinfo() {
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
-
   const navigate = useNavigate();
 
-  const [info, setInfo] = useState<Info>({
-    nickName: "",
-    email: "",
-    joinedAt: "",
-    boardCount: 0,
+  const {
+    data: info,
+    isLoading: infoLoading,
+    isError: infoError,
+    error: infoErr,
+  } = useQuery<Info, AxiosError>({
+    queryKey: ["myInfo"],
+    queryFn: getMyInfo,
   });
-  const [myPost, setMypost] = useState<MyPost[]>([]);
+
+  const {
+    data: myPosts,
+    isLoading: postsLoading,
+    isError: postsError,
+    error: postsErr,
+  } = useQuery<MyPost[], AxiosError>({
+    queryKey: ["myPosts"],
+    queryFn: getMyPosts,
+  });
 
   useEffect(() => {
-    const GetMyPost = async () => {
-      const res: AxiosResponse<APIMyPost> = await api.get(
-        "members/myProfile/boards"
-      );
-      console.log("My post", res.data.data);
-      setMypost(res.data.data.content);
-    };
-    GetMyPost();
-  }, []);
-
-  useEffect(() => {
-    const GetMyInfo = async () => {
-      try {
-        const res: AxiosResponse<APIInfo> = await api.get("members/myProfile");
-        console.log("내정보", res.data.data);
-        setInfo(res.data.data);
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          console.log("내정보 오류", err.response);
-        }
-      }
-    };
-    GetMyInfo();
-  }, []);
-
-  useEffect(() => {
-    const ChangePW = async (msg: MessageEvent) => {
+    const handleChangePW = async (msg: MessageEvent) => {
       if (msg.data === "ChangePW") {
-        console.log("success get msg");
+        console.log("비밀번호 변경 감지됨, 로그아웃 실행");
+
         try {
           const res = await api.delete("members/logout");
-          console.log("success logout", res);
+          console.log("로그아웃 성공", res);
         } catch (err) {
           if (err instanceof AxiosError) {
-            console.log("logout err", err.response);
+            console.log("로그아웃 에러", err.response);
           }
         }
-        alert("비밀번호가 변경되었습니다 ! 다시 로그인 해주세요.");
+        alert("비밀번호가 변경되었습니다! 다시 로그인 해주세요.");
         navigate("/login");
       }
     };
-    window.addEventListener("message", ChangePW);
+    window.addEventListener("message", handleChangePW);
     return () => {
-      window.removeEventListener("message", ChangePW);
+      window.removeEventListener("message", handleChangePW);
     };
   }, [navigate]);
+
+  if (infoLoading || postsLoading) {
+    return (
+      <div className="bg-amber-100 min-h-screen text-center text-2xl font-bold font-[--font-pretendard] pt-10 flex justify-center gap-6">
+        <div className="w-11 h-11 border-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+        <div>불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (infoError || postsError) {
+    console.error("get error", infoErr ?? postsErr);
+    return (
+      <div className="text-center mt-20 text-red-500">
+        정보를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-amber-100 min-h-screen font-[--font-pretendard] pt-10">
-      <div className="flex flex-col justify-center items-center gap-y-30">
+    <div className="bg-amber-100 min-h-screen font-[--font-pretendard]">
+      <div className="flex flex-col justify-center items-center gap-y-30 pt-10">
         <div className="w-150 h-80 border ml-10 bg-amber-50 rounded-2xl text-center pt-2 font-bold">
           <p className="text-2xl">MY INFO</p>
           <div className="flex gap-x-12">
             <div className="overflow-hidden border rounded-full w-30 h-30 mt-14 ml-8 mr-10 flex justify-center">
-              <img className="w-28 h-28" src={icon} alt="avartaIMG"></img>
+              <img className="w-28 h-28" src={icon} alt="avartaIMG" />
             </div>
+
             <div className="flex flex-col mt-8 justify-center items-start font-semibold text-left gap-y-5">
               <div className="flex gap-x-10">
                 <p>닉네임 </p>
-                <p>:</p> <p>{info.nickName}</p>
+                <p>:</p> <p>{info?.nickName}</p>
               </div>
               <div className="flex gap-x-10">
                 <p>이메일 </p>
-                <p>:</p> <p>{info.email}</p>
+                <p>:</p> <p>{info?.email}</p>
               </div>
               <div className="flex gap-x-10">
                 <p>가입일자 </p>
-                <p>:</p> <p>{info.joinedAt}</p>
+                <p>:</p> <p>{info?.joinedAt}</p>
               </div>
               <div className="flex gap-x-10">
                 <p>내가 쓴 게시물 </p>
-                <p>:</p> <p>{info.boardCount}</p>
+                <p>:</p> <p>{info?.boardCount}</p>
               </div>
+
               <div
                 onClick={ChangePwPage}
                 className="cursor-pointer hover:text-stone-700 overflow-hidden"
@@ -135,21 +121,26 @@ export default function Myinfo() {
             </div>
           </div>
         </div>
+
         <div className="w-180 min-h-screen border bg-amber-50 flex flex-col items-center rounded-2xl gap-y-13">
           <p className="font-bold text-2xl mt-10 flex justify-center text-center">
             내가 쓴 글
           </p>
 
-          {myPost.map((item) => (
-            <div
-              key={item.boardId}
-              className="border border-black w-150 h-10 rounded-2xl flex justify-center items-center gap-x-20"
-            >
-              <div className="font-bold">{item.title}</div>
-              <p>-</p>
-              <div className="font-bold">{item.createdAt}</div>
-            </div>
-          ))}
+          {myPosts && myPosts.length > 0 ? (
+            myPosts.map((item) => (
+              <div
+                key={item.boardId}
+                className="border border-black w-150 h-10 rounded-2xl flex justify-center items-center gap-x-20"
+              >
+                <div className="font-bold">{item.title}</div>
+                <p>-</p>
+                <div className="font-bold">{item.createdAt}</div>
+              </div>
+            ))
+          ) : (
+            <div className="mt-10 text-gray-500">작성한 게시글이 없습니다.</div>
+          )}
         </div>
       </div>
     </div>

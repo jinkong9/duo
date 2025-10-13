@@ -6,10 +6,6 @@ interface User {
   nickName: string;
 }
 
-interface ApiResponse {
-  data: User;
-}
-
 interface AuthContextType {
   isLogging: boolean;
   user: User | null;

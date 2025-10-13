@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios, { AxiosError, type AxiosResponse } from "axios";
-import { useNavigate } from "react-router-dom";
+import { AxiosError, type AxiosResponse } from "axios";
+import api from "../Auth/api";
 
 interface ChangPW {
   oldPW: string;
@@ -12,11 +12,6 @@ interface ChangePWres {
   status: number;
   success: boolean;
 }
-
-const api = axios.create({
-  baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-  withCredentials: true,
-});
 
 export default function Changepw() {
   const [pw, setPw] = useState<ChangPW>({

@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useAuth } from "../Auth/context";
 
 export default function Login() {
   interface Login {
     email: string;
     pw: string;
-  }
-
-  interface LoginRes {
-    success: boolean;
-    status: number;
-    data: {
-      nickName: string;
-    };
   }
 
   const [info, setInfo] = useState<Login>({
@@ -40,32 +31,6 @@ export default function Login() {
     login(info);
   };
 
-  /* const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!info.email || !info.pw) {
-      alert("이메일과 비밀번호를 입력해주세요.");
-      return;
-    }
-
-    try {
-      const res: AxiosResponse<LoginRes> = await api.post("/members/login", {
-        email: info.email,
-        pw: info.pw,
-      });
-      if (res.data.success) {
-        login(res.data.data);
-        navigate("/");
-      } else {
-        alert("로그인 실패");
-      }
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log(err.response?.data?.message);
-        alert(err.response?.data?.message);
-      }
-    }
-  }; */
   return (
     <div className="font-[--font-pretendard] bg-amber-100 w-full min-h-screen">
       <p className="active:scale-95 font-bold text-black text-5xl text-center pt-7">

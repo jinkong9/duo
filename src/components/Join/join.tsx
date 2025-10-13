@@ -1,6 +1,9 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../Auth/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { JoinAPI, type JoinBody } from "./joinAPI";
 
 interface Join {
   nickname: string;
@@ -16,11 +19,6 @@ interface JoinRes {
 }
 
 export default function Join() {
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
-
   const [info, setInfo] = useState<Join>({
     nickname: "",
     email: "",
@@ -28,7 +26,7 @@ export default function Join() {
     password: "",
     check_password: "",
   });
-
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [agree, setAgree] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -40,7 +38,39 @@ export default function Join() {
     }));
   };
 
-  const handleJoin = async () => {
+  const register = useMutation({
+    mutationFn: JoinAPI,
+    onSuccess: () => {
+      console.log("회원가입 성공");
+      alert("회원가입이 완료됐습니다 !");
+      navigate("/login");
+    },
+    onError: (err) => {
+      // 4. 타입 가드를 사용하여 안전하게 서버 에러 처리
+      if (axios.isAxiosError(err)) {
+        const errorData = err.response?.data as {
+          errorCode?: string;
+          message?: string;
+        };
+        if (errorData?.errorCode === "DUPLICATE_EMAIL") {
+          // 이메일 중복 시, email 필드에 에러 메시지 설정
+          setErrors((prev) => ({
+            ...prev,
+            email: "이미 사용 중인 이메일입니다.",
+          }));
+        } else {
+          // 그 외 서버 에러는 alert으로 표시
+          alert(errorData?.message || "알 수 없는 오류가 발생했습니다.");
+        }
+      } else {
+        // Axios 에러가 아닌 경우
+        alert("예기치 못한 오류가 발생했습니다.");
+      }
+    },
+  });
+
+  const handleJoin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (
       !info.nickname ||
       !info.email ||
@@ -59,24 +89,7 @@ export default function Join() {
       alert("개인정보 활용 동의하지 않을 시 회원가입이 불가능합니다.");
       return;
     }
-    try {
-      const res: AxiosResponse<JoinRes> = await api.post("/members/register", {
-        email: info.email,
-        nickName: info.nickname,
-        age: Number(info.age),
-        pw: info.password,
-      });
-      if (res.data.success === true) {
-        console.log("회원가입 성공", res.data);
-        alert("회원가입이 완료됐습니다.");
-        navigate("/login");
-      }
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        console.log("err.data", err.response?.data);
-        console.log("err.status", err.response?.status);
-      }
-    }
+    register.mutate(info);
   };
 
   return (
@@ -84,7 +97,10 @@ export default function Join() {
       <p className="mb-15 font-bold text-black text-4xl text-center pt-10">
         회원가입
       </p>
-      <div className="flex flex-col border border-black-300 rounded-2xl p-10 bg-amber-50">
+      <form
+        onSubmit={handleJoin}
+        className="flex flex-col border border-black-300 rounded-2xl p-10 bg-amber-50"
+      >
         <div className="w-150 h-120 flex flex-col items-center">
           <div className="flex flex-col gap-6 items-center justify-center p-7">
             <label className="flex items-center justify-between w-full mb-4">
@@ -164,13 +180,13 @@ export default function Join() {
         </div>
         <div className="flex justify-center items-center mt-5">
           <button
-            onClick={handleJoin}
+            type="submit"
             className="cursor-pointer hover:scale-102 hover:shadow-lg bg-amber-300 border border-black-100 rounded-full pl-4.5 pr-4.5 pt-3 pb-3"
           >
             회원가입
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

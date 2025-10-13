@@ -1,7 +1,8 @@
 import React, { useState, type ChangeEvent } from "react";
 import dayjs from "dayjs";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import { AxiosError, type AxiosResponse } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../Auth/api";
 
 interface Post {
   title: string;
@@ -13,11 +14,6 @@ interface Postres {
 }
 
 export default function Writepost() {
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
-
   const { categoryID } = useParams<{ categoryID: string }>();
   const daydate = dayjs().format("YYYY-MM-DD");
   const [post, setPost] = useState<Post>({

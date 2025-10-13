@@ -1,6 +1,7 @@
 import React, { useEffect, useState, type ChangeEvent } from "react";
-import axios, { AxiosError, type AxiosResponse } from "axios";
+import { AxiosError, type AxiosResponse } from "axios";
 import { useParams } from "react-router-dom";
+import api from "../Auth/api";
 
 interface APIBoard {
   data: board;
@@ -39,11 +40,6 @@ interface APIme {
 }
 
 export default function DetailPost() {
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
-
   const CommnetHeader = ["NickName", "Comment", "date", "댓글수정"];
   const { postID } = useParams<{ postID: string }>();
   const [post, setPost] = useState<board | null>(null);

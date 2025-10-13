@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios, { type AxiosResponse } from "axios";
+import { type AxiosResponse } from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
+import api from "../Auth/api";
+import { useAuth } from "../Auth/context";
 
 interface board {
   id: number;
@@ -18,6 +20,7 @@ interface BoardAPI {
 export default function Board() {
   const header = ["ID", "TITLE", "DATE"];
   const [post, setPost] = useState<board[]>([]);
+  const { isLogging } = useAuth();
 
   const navigate = useNavigate();
   const { categoryID } = useParams<{ categoryID: string }>();
@@ -26,13 +29,13 @@ export default function Board() {
     navigate(`/board/${categoryID}/${postID}`);
   };
   const WritePost = () => {
-    navigate(`/board/${categoryID}/write`);
+    if (isLogging) {
+      navigate(`/board/${categoryID}/write`);
+    } else {
+      alert("로그인이 필요합니다. ");
+      navigate("/login");
+    }
   };
-
-  const api = axios.create({
-    baseURL: "https://port-0-alive-mezqigela5783602.sel5.cloudtype.app/",
-    withCredentials: true,
-  });
 
   useEffect(() => {
     const GetPost = async () => {
