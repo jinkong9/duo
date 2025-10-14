@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import icon from "../../assets/iconimg.png";
 import { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../Auth/api";
 import {
@@ -22,6 +22,12 @@ const ChangePwPage = () => {
 
 export default function Myinfo() {
   const navigate = useNavigate();
+
+  const { categoryID } = useParams<{ categoryID: string }>();
+
+  const GoPost = (postID: number) => {
+    navigate(`/board/${categoryID}/${postID}`);
+  };
 
   const {
     data: info,
@@ -78,7 +84,7 @@ export default function Myinfo() {
   if (infoError || postsError) {
     console.error("get error", infoErr ?? postsErr);
     return (
-      <div className="text-center mt-20 text-red-500">
+      <div className="text-center mt-20 bg-amber-100 min-h-screen">
         정보를 불러오는 중 오류가 발생했습니다.
       </div>
     );
@@ -86,61 +92,70 @@ export default function Myinfo() {
 
   return (
     <div className="bg-amber-100 min-h-screen font-[--font-pretendard]">
-      <div className="flex flex-col justify-center items-center gap-y-30 pt-10">
-        <div className="w-150 h-80 border ml-10 bg-amber-50 rounded-2xl text-center pt-2 font-bold">
-          <p className="text-2xl">MY INFO</p>
-          <div className="flex gap-x-12">
-            <div className="overflow-hidden border rounded-full w-30 h-30 mt-14 ml-8 mr-10 flex justify-center">
-              <img className="w-28 h-28" src={icon} alt="avartaIMG" />
-            </div>
+      <div className="flex flex-col justify-center items-center gap-y-20 pt-10">
+        <div className="flex">
+          <div className="w-150 h-80 border ml-10 bg-amber-50 rounded-2xl text-center pt-2 font-bold">
+            <p className="text-2xl">MY INFO</p>
+            <div className="flex gap-x-12">
+              <div className="overflow-hidden border rounded-full w-30 h-30 mt-14 ml-8 mr-10 flex justify-center">
+                <img className="w-28 h-28" src={icon} alt="avartaIMG" />
+              </div>
+              <div className="flex flex-col mt-8 justify-center items-start font-semibold text-left gap-y-5">
+                <div className="flex gap-x-10">
+                  <p>닉네임 </p>
+                  <p>:</p> <p>{info?.nickName}</p>
+                </div>
+                <div className="flex gap-x-10">
+                  <p>이메일 </p>
+                  <p>:</p> <p>{info?.email}</p>
+                </div>
+                <div className="flex gap-x-10">
+                  <p>가입일자 </p>
+                  <p>:</p> <p>{info?.joinedAt}</p>
+                </div>
+                <div className="flex gap-x-10">
+                  <p>내가 쓴 게시물 </p>
+                  <p>:</p> <p>{info?.boardCount}</p>
+                </div>
 
-            <div className="flex flex-col mt-8 justify-center items-start font-semibold text-left gap-y-5">
-              <div className="flex gap-x-10">
-                <p>닉네임 </p>
-                <p>:</p> <p>{info?.nickName}</p>
-              </div>
-              <div className="flex gap-x-10">
-                <p>이메일 </p>
-                <p>:</p> <p>{info?.email}</p>
-              </div>
-              <div className="flex gap-x-10">
-                <p>가입일자 </p>
-                <p>:</p> <p>{info?.joinedAt}</p>
-              </div>
-              <div className="flex gap-x-10">
-                <p>내가 쓴 게시물 </p>
-                <p>:</p> <p>{info?.boardCount}</p>
-              </div>
-
-              <div
-                onClick={ChangePwPage}
-                className="cursor-pointer hover:text-stone-700 overflow-hidden"
-              >
-                비밀번호 변경하기
+                <div
+                  onClick={ChangePwPage}
+                  className="cursor-pointer hover:text-stone-700 overflow-hidden"
+                >
+                  비밀번호 변경하기
+                </div>
               </div>
             </div>
           </div>
+          <div className="w-150 h-80 border ml-10 bg-amber-50 rounded-2xl text-center pt-2 font-bold">
+            <p className="text-2xl">저장한 글</p>
+          </div>
         </div>
 
-        <div className="w-180 min-h-screen border bg-amber-50 flex flex-col items-center rounded-2xl gap-y-13">
-          <p className="font-bold text-2xl mt-10 flex justify-center text-center">
+        <div>
+          <p className="font-bold text-2xl flex justify-center text-center mb-3">
             내가 쓴 글
           </p>
-
-          {myPosts && myPosts.length > 0 ? (
-            myPosts.map((item) => (
-              <div
-                key={item.boardId}
-                className="border border-black w-150 h-10 rounded-2xl flex justify-center items-center gap-x-20"
-              >
-                <div className="font-bold">{item.title}</div>
-                <p>-</p>
-                <div className="font-bold">{item.createdAt}</div>
+          <div className="w-180 max-h-120 overflow-y-auto pr-2 p-10 mb-10 border bg-amber-50 flex flex-col items-center rounded-2xl gap-y-5">
+            {myPosts && myPosts.length > 0 ? (
+              myPosts.map((item) => (
+                <div
+                  key={item.boardId}
+                  className="border border-black w-120 h-10 rounded-2xl flex justify-between p-5 items-center gap-x-20 cursor-pointer hover:scale-102"
+                  onClick={() => {
+                    GoPost(item.boardId);
+                  }}
+                >
+                  <div className="font-bold">{item.title}</div>
+                  <div className="font-bold">{item.createdAt}</div>
+                </div>
+              ))
+            ) : (
+              <div className="mt-10 text-gray-500">
+                작성한 게시글이 없습니다.
               </div>
-            ))
-          ) : (
-            <div className="mt-10 text-gray-500">작성한 게시글이 없습니다.</div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

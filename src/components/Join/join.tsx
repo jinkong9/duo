@@ -13,11 +13,6 @@ interface Join {
   check_password: string;
 }
 
-interface JoinRes {
-  success: boolean;
-  status: number;
-}
-
 export default function Join() {
   const [info, setInfo] = useState<Join>({
     nickname: "",

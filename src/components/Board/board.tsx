@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { type AxiosResponse } from "axios";
+import { AxiosError, type AxiosResponse } from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import api from "../Auth/api";
 import { useAuth } from "../Auth/context";
-
-interface board {
-  id: number;
-  title: string;
-  createdAt: string;
-}
-
-interface BoardAPI {
-  data: {
-    content: board[];
-  };
-}
+import { useQuery } from "@tanstack/react-query";
+import { GetPost, type board } from "./boardAPI";
 
 export default function Board() {
   const header = ["ID", "TITLE", "DATE"];
@@ -37,20 +27,34 @@ export default function Board() {
     }
   };
 
-  useEffect(() => {
-    const GetPost = async () => {
-      try {
-        const res: AxiosResponse<BoardAPI> = await api.get(
-          `categories/${categoryID}/boards`
-        );
-        console.log("s", res);
-        setPost(res.data.data.content);
-      } catch (err) {
-        console.log("err", err);
-      }
-    };
-    GetPost();
-  }, [categoryID]);
+  const {
+    data: posts,
+    isLoading: postsLoading,
+    isError: postsError,
+    error: postsErr,
+  } = useQuery<board[], AxiosError>({
+    queryKey: ["getPosts", categoryID],
+    queryFn: () => GetPost(categoryID!),
+    enabled: !!categoryID,
+  });
+
+  if (postsLoading) {
+    return (
+      <div className="bg-amber-100 min-h-screen text-center text-2xl font-bold font-[--font-pretendard] pt-10 flex justify-center gap-6">
+        <div className="w-11 h-11 border-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+        <div>불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (postsError) {
+    console.error("get error", postsErr);
+    return (
+      <div className="bg-amber-100 min-h-screen text-center text-2xl font-bold font-[--font-pretendard] pt-10">
+        정보를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
+  }
 
   return (
     <div className="font-[--font-pretendard] min-h-screen bg-amber-100">
@@ -80,7 +84,7 @@ export default function Board() {
               </tr>
             </thead>
             <tbody>
-              {post.map((item) => (
+              {posts?.map((item) => (
                 <tr
                   key={item.id}
                   className="border-b border-gray-200 hover:bg-gray-50 cursor-pointer"

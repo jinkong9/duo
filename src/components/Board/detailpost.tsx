@@ -2,16 +2,14 @@ import React, { useEffect, useState, type ChangeEvent } from "react";
 import { AxiosError, type AxiosResponse } from "axios";
 import { useParams } from "react-router-dom";
 import api from "../Auth/api";
-
-interface APIBoard {
-  data: board;
-}
-
-interface board {
-  title: string;
-  content: string;
-  createdAt: string;
-}
+import { useQuery } from "@tanstack/react-query";
+import { GetDetailPost, GetNickName, GetComments } from "./detailpostAPI";
+import type {
+  Detailboard,
+  NickName,
+  APINickName,
+  GetCommentbody,
+} from "./detailpostAPI";
 
 interface GetComment {
   commentId: number;
@@ -42,7 +40,6 @@ interface APIme {
 export default function DetailPost() {
   const CommnetHeader = ["NickName", "Comment", "date", "댓글수정"];
   const { postID } = useParams<{ postID: string }>();
-  const [post, setPost] = useState<board | null>(null);
   const [nick, setNick] = useState<string>("");
   const [getcomment, setgetComment] = useState<GetComment[]>([]);
   const [comment, setComment] = useState<Comments>({ comment: "" });
@@ -50,34 +47,27 @@ export default function DetailPost() {
   const [editComment, setEditComment] = useState<string>("");
   const [menu, setMenu] = useState<number | null>(null);
 
-  useEffect(() => {
-    const GetPost = async () => {
-      try {
-        const res: AxiosResponse<APIBoard> = await api.get(`boards/${postID}`);
-        setPost(res.data.data);
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          console.log("err", err.response);
-        }
-      }
-    };
-    GetPost();
-  }, [postID]);
+  const {
+    data: detailPost,
+    isLoading: detailPostLoading,
+    isError: detailPostError,
+    error: detailPostErr,
+  } = useQuery<Detailboard, AxiosError>({
+    queryKey: ["DetailPosts", postID],
+    queryFn: () => GetDetailPost(postID!),
+    enabled: !!postID,
+  });
 
-  useEffect(() => {
-    const nick = async () => {
-      try {
-        const res: AxiosResponse<APIme> = await api.get("members/me");
-        console.log("닉네임", res.data.data.nickName);
-        setNick(res.data.data.nickName);
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          console.log("me오류", err.response?.data);
-        }
-      }
-    };
-    nick();
-  }, []);
+  const { data: GetNickname } = useQuery<NickName, AxiosError>({
+    queryKey: ["GetNickName"],
+    queryFn: GetNickName,
+  });
+
+  const { data: comments } = useQuery<GetCommentbody[], AxiosError>({
+    queryKey: ["GetComment", postID],
+    queryFn: () => GetComments(postID!),
+    enabled: !!postID,
+  });
 
   useEffect(() => {
     const GetComment = async () => {
@@ -153,6 +143,24 @@ export default function DetailPost() {
     }
   };
 
+  if (detailPostLoading) {
+    return (
+      <div className="bg-amber-100 min-h-screen text-center text-2xl font-bold font-[--font-pretendard] pt-10 flex justify-center gap-6">
+        <div className="w-11 h-11 border-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+        <div>불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (detailPostError) {
+    console.error("get error", detailPostErr);
+    return (
+      <div className="bg-amber-100 min-h-screen text-center mt-20">
+        정보를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
+  }
+
   return (
     <div className="font-[--font-pretendard] min-h-screen bg-amber-100">
       <div className="font-bold text-2xl flex justify-center pt-10">
@@ -160,12 +168,14 @@ export default function DetailPost() {
       </div>
       <div className="flex flex-col justify-center items-center">
         <div className="bg-stone-100 border-3 rounded-lg w-300 h-20 mt-20 text-center font-bold pt-5 text-3xl">
-          {post?.title}
+          {detailPost?.title}
         </div>
         <div className="bg-stone-100 border-3 rounded-lg w-300 h-80 text-left font-semibold p-5 flex flex-col gap-5">
-          <div className="w-full text-right text-l">{post?.createdAt}</div>
+          <div className="w-full text-right text-l">
+            {detailPost?.createdAt}
+          </div>
           <div className="w-full text-left text-xl p-2 whitespace-pre-line">
-            {post?.content}
+            {detailPost?.content}
           </div>
         </div>
         <div className="w-270 mx-auto bg-white mt-5 border-2 flex flex-col mb-5">
@@ -200,7 +210,7 @@ export default function DetailPost() {
               </tr>
             </thead>
             <tbody>
-              {getcomment.map((item) => (
+              {comments?.map((item) => (
                 <tr key={item.commentId} className="border-b hover:bg-gray-50">
                   <td className="p-4">{item.writer.nickName}</td>
                   <td className="p-4">
@@ -217,7 +227,7 @@ export default function DetailPost() {
 
                   <td className="p-4">{item.createdAt}</td>
                   <td className="p-4 relative">
-                    {item.writer.nickName === nick && (
+                    {item.writer.nickName === GetNickname?.nickName && (
                       <div className="inline-block text-left">
                         <button
                           className="p-2 cursor-pointer overflow-hidden"
